@@ -54,10 +54,13 @@ PROFESSIONAL INFOGRAPHIC REQUIREMENTS:
    - Include geometric shapes, patterns, and decorative elements
    - Add CSS-generated charts, progress bars, and data visualizations
    - Use modern typography with Google Fonts integration
-   - Use REAL, working image URLs from reliable sources
+   - Use REAL, working image URLs from reliable sources that MATCH the topic
    - For country flags: Use flagcdn.com or countryflagsapi.com
-   - For general images: Use Unsplash, Pexels, or Pixabay with specific photo IDs
+   - For general images: Use Unsplash, Pexels, or Pixabay with topic-specific photo IDs
+   - Analyze the prompt topic and select images that directly relate to it
+   - Examples: AI topic → AI/technology images, Pakistan topic → Pakistan flag, Health topic → medical images
    - Include proper image fallbacks with onerror attributes
+   - NEVER use random images that don't relate to the prompt topic
 
 3. MOBILE-FIRST LAYOUT & STRUCTURE:
    - Create a single-page portrait design optimized for mobile screens (9:16 aspect ratio)
@@ -113,13 +116,21 @@ The HTML should be complete body content (no DOCTYPE, html, head tags needed).
 The CSS should be comprehensive styling with mobile-first design patterns.
 Make sure all text content is wrapped in elements with descriptive classes like "title", "subtitle", "fact", "statistic", "chart", "data-point", etc.
 
-IMAGE URL EXAMPLES TO USE:
+TOPIC-SPECIFIC IMAGE URL EXAMPLES TO USE:
 - Pakistan flag: https://flagcdn.com/w320/pk.png
 - India flag: https://flagcdn.com/w320/in.png
 - USA flag: https://flagcdn.com/w320/us.png
-- General images: https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600
+- AI/Technology: https://images.unsplash.com/photo-1677442136019-21780ecad995?w=600 (AI/tech)
+- Business: https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600 (office/business)
+- Health: https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=600 (healthcare)
+- Education: https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600 (education)
+- Sports: https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=600 (sports)
+- Food: https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?w=600 (food)
+- Travel: https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600 (travel/nature)
 - Fallback images: https://picsum.photos/600/400
 - Font Awesome CDN: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css
+
+IMPORTANT: Choose images that directly relate to the user's prompt topic!
 
 Create an infographic that looks like it was designed by a professional design agency with rich data, beautiful visuals, and modern styling optimized specifically for mobile viewing that will impress users.
 '''),
@@ -134,12 +145,19 @@ Create an infographic that looks like it was designed by a professional design a
           
           REQUIREMENTS FOR THIS SPECIFIC INFOGRAPHIC:
           
-          CRITICAL IMAGE REQUIREMENTS:
-          - For country topics (like Pakistan, India, USA): Use actual flag images from flagcdn.com
-          - For general topics: Use real images from Unsplash or Pexels with working URLs
-          - NEVER use placeholder images or broken URLs
+          CRITICAL IMAGE REQUIREMENTS - MUST BE TOPIC-RELEVANT:
+          - Analyze the prompt topic carefully and select images that DIRECTLY relate to it
+          - For country topics (Pakistan, India, USA): Use actual flag images from flagcdn.com
+          - For technology topics (AI, blockchain, etc.): Use technology-related images from Unsplash
+          - For business topics: Use business, office, or corporate images
+          - For health topics: Use medical, healthcare, or wellness images
+          - For education topics: Use school, learning, or academic images
+          - For sports topics: Use sports equipment, stadiums, or athletes
+          - For food topics: Use food, restaurant, or cooking images
+          - For travel topics: Use destination, landmark, or travel images
+          - NEVER use random or irrelevant images - they must match the prompt topic
           - Always add onerror fallbacks: onerror="this.src='https://picsum.photos/600/400'"
-          - Ensure images are relevant and actually load properly
+          - Search for specific, relevant images on Unsplash/Pexels that match the topic
           
           1. CONTENT DENSITY: Generate at least 3x more data than typical infographics:
              - Include 15-25 key statistics, facts, or data points
@@ -198,9 +216,21 @@ Create an infographic that looks like it was designed by a professional design a
           - Use single-column layout throughout the entire design
           - Prioritize vertical scrolling over horizontal overflow
           
+          IMAGE SELECTION STRATEGY:
+          - Read the prompt topic carefully and understand what it's about
+          - If it mentions a country (Pakistan, India, USA, etc.) → use that country's flag
+          - If it's about AI, technology, or computers → use tech/AI images
+          - If it's about health, medicine, or wellness → use healthcare images
+          - If it's about business, finance, or economy → use business/corporate images
+          - If it's about education, learning, or schools → use educational images
+          - If it's about sports, fitness, or athletes → use sports images
+          - If it's about food, cooking, or restaurants → use food images
+          - If it's about travel, tourism, or destinations → use travel images
+          - Always ensure images are contextually relevant to the prompt topic
+          
           Make this infographic so rich with data and visually appealing that users will be impressed by the depth and professional quality. Include everything from statistics to visual elements that tell a complete story about the topic.
           
-          Remember: This should look like it was created by a professional design agency with extensive research and beautiful data visualization, optimized specifically for mobile viewing.''',
+          Remember: This should look like it was created by a professional design agency with extensive research and beautiful data visualization, optimized specifically for mobile viewing with topic-relevant images.''',
         ),
       ];
       final response = await _model.generateContent(content);
