@@ -65,7 +65,7 @@ class HomeView extends GetView<HomeController> {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'Transform your ideas into stunning visual infographics with Google Gemini AI',
+                    'Transform your ideas into stunning, data-rich visual infographics with professional-grade design and comprehensive statistics',
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.white70,
@@ -109,7 +109,7 @@ class HomeView extends GetView<HomeController> {
                     controller: controller.promptController,
                     maxLines: 4,
                     decoration: InputDecoration(
-                      hintText: 'e.g., "Climate change statistics and solutions", "Benefits of renewable energy", "Digital marketing trends 2024"...',
+                      hintText: 'e.g., "Climate change statistics and solutions", "Benefits of renewable energy", "Digital marketing trends 2024", "Artificial Intelligence impact on healthcare", "Sustainable business practices"...',
                       hintStyle: TextStyle(
                         color: Colors.grey[500],
                         fontSize: 14,
@@ -186,7 +186,7 @@ class HomeView extends GetView<HomeController> {
                                 ),
                                 SizedBox(width: 12),
                                 Text(
-                                  'Generating Infographic...',
+                                  'Creating Professional Infographic...',
                                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                                 ),
                               ],
@@ -240,7 +240,12 @@ class HomeView extends GetView<HomeController> {
                   _buildFeatureItem(
                     Icons.psychology,
                     'AI-Powered Generation',
-                    'Uses Google Gemini AI to create professional infographics',
+                    'Advanced Google Gemini AI creates data-rich, professional infographics',
+                  ),
+                  _buildFeatureItem(
+                    Icons.analytics,
+                    'Rich Data Visualization',
+                    'Comprehensive statistics, charts, and interactive data elements',
                   ),
                   _buildFeatureItem(
                     Icons.edit,
@@ -254,8 +259,13 @@ class HomeView extends GetView<HomeController> {
                   ),
                   _buildFeatureItem(
                     Icons.palette,
-                    'Beautiful Design',
-                    'Modern, responsive designs with attractive visual elements',
+                    'Professional Design',
+                    'Modern gradients, animations, and glassmorphism effects',
+                  ),
+                  _buildFeatureItem(
+                    Icons.timeline,
+                    'Multiple Chart Types',
+                    'Bar charts, pie charts, progress bars, and trend visualizations',
                   ),
                 ],
               ),

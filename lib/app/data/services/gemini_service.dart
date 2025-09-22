@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer' as dp;
-import 'package:get/get.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import '../models/infographic_model.dart';
 
@@ -29,37 +28,86 @@ class GeminiService {
           requiredProperties: ['html', 'css'],
         ),
       ),
-      systemInstruction: Content.text('''You are an infographic generator.
+      systemInstruction: Content.text('''You are a professional infographic designer and data visualization expert.
 respond with ONLY a JSON object in this exact format:
 {
-  "html": "Complete HTML File code including head and body. head should contain all the resourses we are using in body like any icons or other stuff for the infographic content.complete file structure",
-  "css": "complete CSS File code to attach with Html for for styling the infographic. full code nothing else."
+  "html": "Complete HTML File code including head and body. head should contain all the resources we are using in body like any icons or other stuff for the infographic content.complete file structure",
+  "css": "complete CSS File code to attach with Html for styling the infographic. full code nothing else."
 }
 
-Requirements:
-1. Create a visually appealing infographic poster on a give topic with modern design
-2. Use attractive colors, fonts, and layout
-3. Include relevant icons, charts, or visual elements using CSS
-4. Use very minimal text and more diagrams, images and icons.
-5. Use semantic HTML elements
-6. Use different stylings grids to make fancy dymanic look. 
-7. Add relevant statistics, facts, or key points about the topic
-8. Use Different colors according to the topic. create a proper theme.
-9. Make text elements easily identifiable with classes for editing
-10. Ensure the design is professional and informative
-11. only make  asingle page in portrait view to represent everything on a single page (9:16 aspect ratio)
-    - Width = 100vw
-    - Max-height = calc(100vw * 16 / 9)
-    - size of everything manually in vw or % to keep sizes calculated and fit inside single page.
-    - All child elements must size themselves relative to parent (%, vw), not px or vh.
-    - keep the text sizes very small around 0.1 vw to 0.5 vw.
-    - Keep content minimal to fit within one 9:16 frame. Do not exceed.
-    - if there is details tetxt keep it more small to fit in less space.
+PROFESSIONAL INFOGRAPHIC REQUIREMENTS:
 
+1. DATA RICHNESS & CONTENT (Generate 3x more data):
+   - Include at least 15-20 key statistics, facts, or data points
+   - Add multiple comparison charts, bar graphs, pie charts, or line graphs
+   - Include at least 5-7 different sections with unique data
+   - Add trending data, growth percentages, and comparative metrics
+   - Include relevant quotes, expert insights, or case studies
+   - Add timeline elements, process flows, or step-by-step guides
+   - Include before/after comparisons or pros/cons analysis
+
+2. VISUAL DESIGN & STYLING:
+   - Use modern CSS gradients, shadows, and animations
+   - Implement glassmorphism effects, card-based layouts
+   - Add hover effects, smooth transitions, and micro-interactions
+   - Use professional color schemes with 3-5 complementary colors
+   - Include geometric shapes, patterns, and decorative elements
+   - Add CSS-generated charts, progress bars, and data visualizations
+   - Use modern typography with Google Fonts integration
+
+3. MOBILE-FIRST LAYOUT & STRUCTURE:
+   - Create a single-page portrait design optimized for mobile screens (9:16 aspect ratio)
+   - Use single-column layout to maximize readability on narrow screens
+   - Implement vertical stacking with proper spacing between sections
+   - Avoid horizontal columns that cause content overflow on mobile
+   - Use full-width cards and sections for better space utilization
+   - Create visual hierarchy with proper spacing, not just text sizes
+   - Include header, main content sections, and footer with consistent spacing
+
+4. TECHNICAL SPECIFICATIONS FOR MOBILE:
+   - Width = 100vw, Max-height = calc(100vw * 16 / 9)
+   - All sizing in vw, %, or relative units (no px, vh)
+   - Text sizes: 1.2vw to 4vw for better mobile readability
+   - Use full-width containers (95-98vw) with minimal margins (1-2vw)
+   - Stack elements vertically instead of horizontal columns
+   - Include Font Awesome icons, Material Icons, or custom SVG icons
+   - Add at least one high-quality image from Unsplash or Pexels
+   - Implement CSS animations and transitions optimized for mobile
+
+5. CONTENT ELEMENTS TO INCLUDE:
+   - Eye-catching title with subtitle
+   - 3-4 main data sections with statistics
+   - 2-3 comparison charts or infographics
+   - Key takeaways or bullet points
+   - Visual icons and illustrations
+   - Color-coded categories or themes
+   - Call-to-action or conclusion section
+
+6. MOBILE-FIRST PROFESSIONAL TOUCHES:
+   - Use data visualization libraries concepts (Chart.js style CSS)
+   - Add subtle animations and hover effects optimized for touch
+   - Include professional color gradients and shadows
+   - Use modern UI patterns like full-width cards, badges, and progress indicators
+   - Add visual elements like arrows, connectors, and flow diagrams (vertical orientation)
+   - Include social proof elements or credibility indicators
+   - Ensure all interactive elements are touch-friendly (minimum 44px equivalent)
+   - Use vertical flow diagrams and process charts instead of horizontal ones
+   - Create mobile-optimized charts that stack vertically when needed
+
+7. MOBILE LAYOUT PATTERNS TO USE:
+   - Header section: Full-width title with subtitle (2-3vw padding)
+   - Statistics section: Stack statistics vertically, not side-by-side
+   - Chart section: Full-width charts that scale properly on mobile
+   - Content sections: Single-column cards with 3-5vw spacing
+   - Footer section: Full-width with proper mobile typography
+   - Avoid: Multi-column grids, horizontal sidebars, cramped layouts
+   - Use: Vertical flow, generous white space, touch-friendly sizing
 
 The HTML should be complete body content (no DOCTYPE, html, head tags needed).
-The CSS should be comprehensive styling for the HTML content.
-Make sure all text content is wrapped in elements with descriptive classes like "title", "subtitle", "fact", "statistic", etc.
+The CSS should be comprehensive styling with mobile-first design patterns.
+Make sure all text content is wrapped in elements with descriptive classes like "title", "subtitle", "fact", "statistic", "chart", "data-point", etc.
+
+Create an infographic that looks like it was designed by a professional design agency with rich data, beautiful visuals, and modern styling optimized specifically for mobile viewing that will impress users.
 '''),
     );
   }
@@ -68,7 +116,58 @@ Make sure all text content is wrapped in elements with descriptive classes like 
     try {
       final content = [
         Content.text(
-          'Create an verticle poster design on topic: "$prompt"  keep the text sizes very small around 0.1 vw to 0.5 vw.Use at least one image url from freepik as well as set onerror to swap in a random https://picsum.photos/600/400, include icons from font awesome or material icons or heroicons or table icons or chart icons or diagram icons or graph icons or iconify icons or any other icons,make variety of charts and diagrams ',
+          '''Create a comprehensive, data-rich vertical infographic poster on topic: "$prompt"
+          
+          REQUIREMENTS FOR THIS SPECIFIC INFOGRAPHIC:
+          
+          1. CONTENT DENSITY: Generate at least 3x more data than typical infographics:
+             - Include 15-25 key statistics, facts, or data points
+             - Add 4-6 different data visualization sections
+             - Include multiple charts: bar charts, pie charts, line graphs, progress bars
+             - Add comparison data, trends, and growth metrics
+             - Include expert quotes, case studies, or real-world examples
+             - Add timeline elements, process flows, or step-by-step breakdowns
+          
+          2. VISUAL RICHNESS: Make it visually stunning and professional:
+             - Use at least 3-5 high-quality images from Unsplash, Pexels, or Pixabay
+             - Include 20+ icons from Font Awesome, Material Icons, or Heroicons
+             - Add CSS-generated charts, progress bars, and data visualizations
+             - Use modern gradients, glassmorphism effects, and shadows
+             - Include geometric shapes, patterns, and decorative elements
+             - Add subtle animations and hover effects
+          
+          3. MOBILE-OPTIMIZED TECHNICAL IMPLEMENTATION:
+             - Text sizes: 1.5vw to 4vw for better mobile readability
+             - Use single-column vertical layout (NO horizontal columns)
+             - Full-width sections (95-98vw) with minimal side margins (1-2vw)
+             - Stack all content vertically to prevent overflow
+             - Include professional color schemes with proper contrast
+             - Add card-based sections with generous spacing (3-5vw between sections)
+             - Implement modern typography with Google Fonts
+             - Use CSS animations and smooth transitions optimized for mobile
+             - Ensure all charts and data visualizations fit within mobile width
+          
+          4. DATA VISUALIZATION: Create multiple interactive-style charts:
+             - Bar charts showing comparisons
+             - Pie charts for percentage breakdowns
+             - Progress bars for completion rates
+             - Line graphs for trends over time
+             - Donut charts for category distributions
+             - Infographic-style icons and illustrations
+          
+          MOBILE DESIGN REQUIREMENTS:
+          - NEVER use horizontal columns or side-by-side layouts
+          - ALWAYS stack content vertically for mobile optimization
+          - Use full-width sections (95-98vw) with minimal margins
+          - Ensure all text is readable on mobile screens (minimum 1.5vw)
+          - Create generous spacing between sections (3-5vw)
+          - Make charts and visualizations fit mobile width perfectly
+          - Use single-column layout throughout the entire design
+          - Prioritize vertical scrolling over horizontal overflow
+          
+          Make this infographic so rich with data and visually appealing that users will be impressed by the depth and professional quality. Include everything from statistics to visual elements that tell a complete story about the topic.
+          
+          Remember: This should look like it was created by a professional design agency with extensive research and beautiful data visualization, optimized specifically for mobile viewing.''',
         ),
       ];
       final response = await _model.generateContent(content);

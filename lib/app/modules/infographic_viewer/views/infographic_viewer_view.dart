@@ -54,23 +54,37 @@ class InfographicViewerView extends GetView<InfographicViewerController> {
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
-                color: const Color(0xFF6C63FF).withOpacity(0.1),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      const Color(0xFF6C63FF).withOpacity(0.1),
+                      const Color(0xFF9C88FF).withOpacity(0.1),
+                    ],
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                  ),
+                ),
                 child: const Row(
                   children: [
                     Icon(
-                      Icons.info_outline,
+                      Icons.touch_app,
                       color: Color(0xFF6C63FF),
                       size: 20,
                     ),
                     SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        'Tap on any text element to edit it',
+                        'Tap any text to edit • Rich data & professional design',
                         style: TextStyle(
                           color: Color(0xFF6C63FF),
                           fontWeight: FontWeight.w500,
                         ),
                       ),
+                    ),
+                    Icon(
+                      Icons.auto_awesome,
+                      color: Color(0xFF6C63FF),
+                      size: 16,
                     ),
                   ],
                 ),
@@ -109,6 +123,9 @@ class InfographicViewerView extends GetView<InfographicViewerController> {
                               disableHorizontalScroll: true,
                               disableVerticalScroll: false,
                               javaScriptEnabled: true,
+                              useWideViewPort: true,
+                              loadWithOverviewMode: true,
+                              textZoom: 100,
                             ),
                             onWebViewCreated: controller.onWebViewCreated,
                             onLoadStop: (controller, url) =>
@@ -122,25 +139,40 @@ class InfographicViewerView extends GetView<InfographicViewerController> {
                           Obx(
                             () => controller.isLoading.value
                                 ? Container(
-                                    color: Colors.white,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
                                     child: const Center(
                                       child: Column(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
                                           CircularProgressIndicator(
+                                            strokeWidth: 3,
                                             valueColor:
                                                 AlwaysStoppedAnimation<Color>(
                                                   Color(0xFF6C63FF),
                                                 ),
                                           ),
-                                          SizedBox(height: 16),
+                                          SizedBox(height: 20),
                                           Text(
-                                            'Loading infographic...',
+                                            'Creating Your Professional Infographic...',
                                             style: TextStyle(
                                               color: Color(0xFF6C63FF),
-                                              fontWeight: FontWeight.w500,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 16,
                                             ),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          SizedBox(height: 8),
+                                          Text(
+                                            'Generating rich data, charts, and visual elements',
+                                            style: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 12,
+                                            ),
+                                            textAlign: TextAlign.center,
                                           ),
                                         ],
                                       ),
@@ -164,7 +196,7 @@ class InfographicViewerView extends GetView<InfographicViewerController> {
                       child: ElevatedButton.icon(
                         onPressed: controller.regenerateInfographic,
                         icon: const Icon(Icons.refresh),
-                        label: const Text('New Infographic'),
+                        label: const Text('Generate New'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.grey[100],
                           foregroundColor: Colors.grey[700],
