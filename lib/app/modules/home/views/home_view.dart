@@ -186,7 +186,7 @@ class HomeView extends GetView<HomeController> {
                                 ),
                                 SizedBox(width: 12),
                                 Text(
-                                  'Creating Professional Infographic...',
+                                  'Creating Infographic..',
                                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                                 ),
                               ],
