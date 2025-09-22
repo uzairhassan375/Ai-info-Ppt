@@ -54,6 +54,10 @@ PROFESSIONAL INFOGRAPHIC REQUIREMENTS:
    - Include geometric shapes, patterns, and decorative elements
    - Add CSS-generated charts, progress bars, and data visualizations
    - Use modern typography with Google Fonts integration
+   - Use REAL, working image URLs from reliable sources
+   - For country flags: Use flagcdn.com or countryflagsapi.com
+   - For general images: Use Unsplash, Pexels, or Pixabay with specific photo IDs
+   - Include proper image fallbacks with onerror attributes
 
 3. MOBILE-FIRST LAYOUT & STRUCTURE:
    - Create a single-page portrait design optimized for mobile screens (9:16 aspect ratio)
@@ -71,8 +75,10 @@ PROFESSIONAL INFOGRAPHIC REQUIREMENTS:
    - Use full-width containers (95-98vw) with minimal margins (1-2vw)
    - Stack elements vertically instead of horizontal columns
    - Include Font Awesome icons, Material Icons, or custom SVG icons
-   - Add at least one high-quality image from Unsplash or Pexels
+   - Add at least one high-quality image from reliable sources
+   - Use working image URLs: flagcdn.com for flags, Unsplash/Pexels for general images
    - Implement CSS animations and transitions optimized for mobile
+   - Include image fallbacks: onerror="this.src='https://picsum.photos/600/400'"
 
 5. CONTENT ELEMENTS TO INCLUDE:
    - Eye-catching title with subtitle
@@ -107,6 +113,14 @@ The HTML should be complete body content (no DOCTYPE, html, head tags needed).
 The CSS should be comprehensive styling with mobile-first design patterns.
 Make sure all text content is wrapped in elements with descriptive classes like "title", "subtitle", "fact", "statistic", "chart", "data-point", etc.
 
+IMAGE URL EXAMPLES TO USE:
+- Pakistan flag: https://flagcdn.com/w320/pk.png
+- India flag: https://flagcdn.com/w320/in.png
+- USA flag: https://flagcdn.com/w320/us.png
+- General images: https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600
+- Fallback images: https://picsum.photos/600/400
+- Font Awesome CDN: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css
+
 Create an infographic that looks like it was designed by a professional design agency with rich data, beautiful visuals, and modern styling optimized specifically for mobile viewing that will impress users.
 '''),
     );
@@ -120,6 +134,13 @@ Create an infographic that looks like it was designed by a professional design a
           
           REQUIREMENTS FOR THIS SPECIFIC INFOGRAPHIC:
           
+          CRITICAL IMAGE REQUIREMENTS:
+          - For country topics (like Pakistan, India, USA): Use actual flag images from flagcdn.com
+          - For general topics: Use real images from Unsplash or Pexels with working URLs
+          - NEVER use placeholder images or broken URLs
+          - Always add onerror fallbacks: onerror="this.src='https://picsum.photos/600/400'"
+          - Ensure images are relevant and actually load properly
+          
           1. CONTENT DENSITY: Generate at least 3x more data than typical infographics:
              - Include 15-25 key statistics, facts, or data points
              - Add 4-6 different data visualization sections
@@ -129,12 +150,15 @@ Create an infographic that looks like it was designed by a professional design a
              - Add timeline elements, process flows, or step-by-step breakdowns
           
           2. VISUAL RICHNESS: Make it visually stunning and professional:
-             - Use at least 3-5 high-quality images from Unsplash, Pexels, or Pixabay
+             - Use REAL high-quality images from reliable sources (Unsplash, Pexels, Pixabay, Wikimedia Commons)
+             - For countries: Use actual flag images from reliable sources like flagcdn.com or countryflagsapi.com
+             - For topics: Use specific, relevant images (e.g., for "Pakistan" use actual Pakistan flag, for "AI" use AI-related images)
              - Include 20+ icons from Font Awesome, Material Icons, or Heroicons
              - Add CSS-generated charts, progress bars, and data visualizations
              - Use modern gradients, glassmorphism effects, and shadows
              - Include geometric shapes, patterns, and decorative elements
              - Add subtle animations and hover effects
+             - NEVER use placeholder images or broken URLs
           
           3. MOBILE-OPTIMIZED TECHNICAL IMPLEMENTATION:
              - Text sizes: 1.5vw to 4vw for better mobile readability
@@ -154,6 +178,15 @@ Create an infographic that looks like it was designed by a professional design a
              - Line graphs for trends over time
              - Donut charts for category distributions
              - Infographic-style icons and illustrations
+          
+          IMAGE REQUIREMENTS:
+          - Use REAL image URLs that actually work (test them)
+          - For country flags: Use https://flagcdn.com/w320/pk.png (replace 'pk' with country code)
+          - For general images: Use https://images.unsplash.com/photo-[id] or https://picsum.photos/600/400
+          - For icons: Use Font Awesome CDN: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css
+          - Add proper onerror fallbacks: onerror="this.src='https://picsum.photos/600/400'"
+          - NEVER use placeholder.com, via.placeholder.com, or broken URLs
+          - Ensure images are relevant to the topic (e.g., Pakistan flag for Pakistan topics)
           
           MOBILE DESIGN REQUIREMENTS:
           - NEVER use horizontal columns or side-by-side layouts
