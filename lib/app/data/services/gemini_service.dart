@@ -5,7 +5,7 @@ import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../models/infographic_model.dart';
-import 'unsplash_service.dart';
+// import 'unsplash_service.dart'; // Commented out - using textual data only
 
 class GeminiService {
   static const String _apiKey =
@@ -40,7 +40,7 @@ respond with ONLY a JSON object in this exact format:
 }
 
 CRITICAL REQUIREMENTS - MANDATORY COMPLIANCE:
-1. IMAGE RELEVANCE IS ABSOLUTELY CRITICAL - NO EXCEPTIONS
+1. TEXT-ONLY CONTENT - NO IMAGES, USE ICONS AND CSS GRAPHICS ONLY
 2. PROFESSIONAL DATA PRESENTATION IS REQUIRED
 3. CONSISTENCY AND ACCURACY ARE MANDATORY
 4. USABILITY MUST BE OPTIMIZED
@@ -64,19 +64,14 @@ PROFESSIONAL INFOGRAPHIC REQUIREMENTS:
    - Include geometric shapes, patterns, and decorative elements
    - Add CSS-generated charts, progress bars, and data visualizations
    - Use modern typography with Google Fonts integration
-   - MANDATORY: Use ONLY highly relevant images that DIRECTLY match the topic
-   - For country flags: Use flagcdn.com or countryflagsapi.com
-   - For general images: Use Unsplash, Pexels, or Pixabay with topic-specific photo IDs
-   - CRITICAL: Analyze the prompt topic and select images that directly relate to it
-   - Examples: AI topic → AI/technology images, Pakistan topic → Pakistan flag, Health topic → medical images
-   - If exact images aren't available, use GENERIC images from the same category
-   - Food subcategories (Kolkata biryani, Lucknowi biryani) → use generic biryani/food images
-   - City subcategories → use generic city/landmark images if specific city images aren't available
-   - Include proper image fallbacks with onerror attributes
-   - NEVER use random images that don't relate to the prompt topic
-   - NEVER use the same image in multiple sections - each section must have UNIQUE images
-   - Each section should have images that relate to that specific section's content
-   - IMAGE RELEVANCE CHECK: Ask yourself "Would a user immediately understand why this image is here?"
+   - MANDATORY: NO IMAGES - Use only Font Awesome icons, Material Icons, and CSS graphics
+   - Use CSS gradients, shadows, and visual effects for visual appeal
+   - Create data visualizations using pure CSS (progress bars, charts, graphs)
+   - Use icon fonts and SVG icons for visual elements
+   - Include CSS animations and transitions for interactivity
+   - Use color schemes and typography to create visual hierarchy
+   - Create visual interest through CSS shapes, borders, and backgrounds
+   - NEVER use external images - focus on CSS-based visual design
 
 3. MOBILE-FIRST LAYOUT & STRUCTURE:
    - Create a single-page portrait design optimized for mobile screens (9:16 aspect ratio)
@@ -98,10 +93,9 @@ PROFESSIONAL INFOGRAPHIC REQUIREMENTS:
    - Use full-width containers (95-98vw) with minimal margins (1-2vw)
    - Stack elements vertically instead of horizontal columns
    - Include Font Awesome icons, Material Icons, or custom SVG icons
-   - Add at least one high-quality image from reliable sources
-   - Use working image URLs: flagcdn.com for flags, Unsplash/Pexels for general images
+   - Use CSS-generated visual elements and graphics
    - Implement CSS animations and transitions optimized for mobile
-   - Include image fallbacks: onerror="this.src='https://picsum.photos/600/400'"
+   - Create visual interest through CSS gradients, shadows, and shapes
 
 5. CONTENT ELEMENTS TO INCLUDE:
    - Eye-catching title with subtitle
@@ -150,76 +144,56 @@ The HTML should be complete body content (no DOCTYPE, html, head tags needed).
 The CSS should be comprehensive styling with mobile-first design patterns.
 Make sure all text content is wrapped in elements with descriptive classes like "title", "subtitle", "fact", "statistic", "chart", "data-point", etc.
 
-IMAGE SOURCE WEBSITES AND SEARCH INSTRUCTIONS:
+TEXT-ONLY DESIGN REQUIREMENTS:
 
-WEBSITE NAMES TO USE FOR IMAGES:
-- Unsplash.com - Search for high-quality stock photos
-- Pexels.com - Free stock photos and videos
-- Pixabay.com - Free images and videos
-- Flagcdn.com - Country flags (use format: flagcdn.com/w320/[country-code].png)
-- Picsum.photos - Random placeholder images for fallbacks
+CSS-BASED VISUAL ELEMENTS:
+- Use Font Awesome icons for visual elements (fas fa-chart-bar, fas fa-users, etc.)
+- Create CSS gradients and shadows for visual depth
+- Use CSS shapes and borders for decorative elements
+- Implement CSS animations and transitions
+- Create data visualizations using pure CSS (progress bars, charts)
+- Use color schemes and typography for visual hierarchy
+- Include CSS-generated patterns and geometric shapes
 
-SEARCH INSTRUCTIONS FOR DIFFERENT TOPICS:
-- Country flags: Use flagcdn.com with country codes (pk for Pakistan, in for India, us for USA)
-- Cricket/Sports: Search Unsplash/Pexels for "cricket", "cricket stadium", "cricket players", "sports"
-- Food topics: Search for "food", "cooking", "restaurant", "ingredients", "biryani", "Indian food"
-- Technology/AI: Search for "artificial intelligence", "technology", "robots", "computers", "digital"
-- Business: Search for "business", "office", "corporate", "meetings", "finance"
-- Health: Search for "healthcare", "medical", "doctor", "hospital", "wellness"
-- Education: Search for "education", "school", "learning", "students", "classroom"
-- Travel: Search for "travel", "destinations", "landmarks", "tourism"
+NO EXTERNAL IMAGES - FOCUS ON:
+- Rich textual content and data
+- CSS-based visual design
+- Icon fonts and SVG graphics
+- Color schemes and typography
+- CSS animations and effects
 
-IMPORTANT: Always use working image URLs from these websites and add onerror fallbacks
-
-SECTION-SPECIFIC IMAGE SEARCH INSTRUCTIONS:
+DESIGN APPROACH FOR DIFFERENT TOPICS:
 
 FOR CRICKET/SPORTS TOPICS (e.g., 1992 Cricket World Cup, sports stats):
-- Header: Search Unsplash/Pexels for "cricket world cup" or "cricket tournament" - find cricket world cup main image
-- Statistics: Search for "cricket statistics" or "sports data" - find cricket data/statistics images
-- Charts: Search for "cricket analytics" or "sports charts" - find cricket data visualization images
-- Content 1: Search for "cricket world cup stadium" or "Melbourne cricket ground" - find world cup stadium images
-- Content 2: Search for "cricket world cup players" or "1992 cricket" - find world cup player images
-- Content 3: Search for "cricket world cup trophy" or "cricket championship" - find trophy/championship images
-- Footer: Search for "cricket world cup celebration" or "cricket victory" - find celebration images
-- NEVER use mountain, landscape, or unrelated images for sports topics!
-- ALWAYS use DIFFERENT images for each section - never repeat the same image!
+- Use sports-related icons (fas fa-trophy, fas fa-medal, fas fa-users)
+- Create CSS charts for statistics and data visualization
+- Use color schemes that represent sports/competition
+- Focus on data-rich content with statistics and facts
 
 FOR FOOD TOPICS (e.g., biryani, Indian cuisine):
-- Header: Search for the main dish (e.g., "biryani", "Indian food") - find main dish image
-- Statistics: Search for "cooking" or "kitchen" - find cooking/kitchen images
-- Charts: Search for specific cuisine (e.g., "Indian food", "curry") - find cuisine images
-- Content 1: Search for "ingredients" or "spices" - find ingredient images
-- Content 2: Search for "restaurant" or "dining" - find dining/restaurant images
-- Content 3: Search for "traditional cooking" or "food preparation" - find cooking images
-- Footer: Search for "food preparation" or "kitchen" - find food prep images
+- Use food-related icons (fas fa-utensils, fas fa-fire, fas fa-leaf)
+- Create CSS visualizations for ingredients and nutrition data
+- Use warm color schemes that represent food/cooking
+- Focus on detailed information about preparation and ingredients
 
 FOR TECHNOLOGY TOPICS (e.g., AI, blockchain):
-- Header: Search for "artificial intelligence" or "technology" - find AI/tech images
-- Statistics: Search for "data analytics" or "charts" - find data visualization images
-- Charts: Search for "data charts" or "analytics" - find chart/graph images
-- Content 1: Search for "AI robots" or "artificial intelligence" - find AI/robotics images
-- Content 2: Search for "digital technology" or "cybersecurity" - find digital/cyber images
-- Content 3: Search for "innovation" or "technology" - find innovation images
-- Footer: Search for "future technology" or "AI" - find future tech images
+- Use tech-related icons (fas fa-robot, fas fa-microchip, fas fa-code)
+- Create CSS charts for data analytics and trends
+- Use modern, tech-inspired color schemes
+- Focus on technical specifications and data points
 
 FOR COUNTRY TOPICS (e.g., Pakistan, India):
-- Header: Use flagcdn.com with country code (e.g., flagcdn.com/w320/pk.png for Pakistan)
-- Statistics: Search for "landmarks" or city name - find landmark images
-- Charts: Search for "data analytics" or "charts" - find data/chart images
-- Content 1: Search for "culture" or country name - find cultural images
-- Content 2: Search for "business" or "economy" - find business/economic images
-- Content 3: Search for "tourism" or country name - find tourism images
-- Footer: Search for "heritage" or country name - find heritage images
+- Use geography-related icons (fas fa-flag, fas fa-map, fas fa-building)
+- Create CSS visualizations for demographic and economic data
+- Use national color schemes where appropriate
+- Focus on comprehensive country information and statistics
 
-IMAGE RELEVANCE CHECKLIST - MANDATORY:
-- Does the image directly relate to the prompt topic? YES/NO
-- Is it from the same category as the topic? YES/NO
-- Would a user understand the connection immediately? YES/NO
-- Is it professional and high-quality? YES/NO
-- Is this image UNIQUE and not used in other sections? YES/NO
-- If NO to any question, find a different image!
-
-IMPORTANT: Choose images that directly relate to the user's prompt topic! If exact images aren't available, use generic images from the same category.
+DESIGN CHECKLIST - MANDATORY:
+- Does the design use appropriate icons for the topic? YES/NO
+- Is the color scheme professional and relevant? YES/NO
+- Are there sufficient data visualizations using CSS? YES/NO
+- Is the content rich and informative? YES/NO
+- Does it look professional without external images? YES/NO
 
 Create an infographic that looks like it was designed by a professional design agency with rich data, beautiful visuals, and modern styling optimized specifically for mobile viewing that will impress users.
 '''),
@@ -239,13 +213,16 @@ Create an infographic that looks like it was designed by a professional design a
         print('🔍 DEBUG: Prompt contains country keywords: ${_containsCountryKeywords(prompt)}');
         print('🔍 DEBUG: Prompt contains tech keywords: ${_containsTechKeywords(prompt)}');
         
-        // Get Unsplash images for the prompt
-        print('🔍 DEBUG: Getting Unsplash images for prompt...');
-        final unsplashImages = await UnsplashService.getInfographicImages(prompt);
-        print('🔍 DEBUG: Found ${unsplashImages.length} Unsplash images');
-        for (final entry in unsplashImages.entries) {
-          print('🔍 DEBUG: ${entry.key}: ${entry.value}');
-        }
+        // Get Unsplash images for the prompt - COMMENTED OUT FOR TEXTUAL DATA ONLY
+        // print('🔍 DEBUG: Getting Unsplash images for prompt...');
+        // final unsplashImages = await UnsplashService.getInfographicImages(prompt);
+        // print('🔍 DEBUG: Found ${unsplashImages.length} Unsplash images');
+        // for (final entry in unsplashImages.entries) {
+        //   print('🔍 DEBUG: ${entry.key}: ${entry.value}');
+        // }
+        
+        // Using empty map for no images
+        final unsplashImages = <String, String>{};
       
       final content = [
         Content.text(
@@ -259,153 +236,149 @@ Create an infographic that looks like it was designed by a professional design a
           - TECH TOPIC DETECTED: ${_containsTechKeywords(prompt)}
           - EXPECTED IMAGE TYPE: ${_getExpectedImageType(prompt)}
           
-          🖼️ UNSPLASH IMAGES PROVIDED:
-          ${unsplashImages.isNotEmpty ? unsplashImages.entries.map((e) => '- ${e.key}: ${e.value}').join('\n') : 'No Unsplash images found'}
-          
-          🚨🚨🚨 MINIMAL IMAGE STRATEGY - FOCUS ON DATA 🚨🚨🚨
+          🚨🚨🚨 TEXT-ONLY STRATEGY - NO IMAGES 🚨🚨🚨
           CRITICAL INSTRUCTIONS:
-          - MANDATORY: Use ONLY 2-3 images total (header + 1-2 strategic placements)
-          - MANDATORY: Focus on DATA DENSITY over image quantity
-          - MANDATORY: Use the provided Unsplash images above (max 3 images)
-          - MANDATORY: If no Unsplash images provided, use fallback sources (max 3 images)
-          - MANDATORY: Prioritize text, statistics, charts, and data visualizations
+          - MANDATORY: NO IMAGES - Use only textual content, icons, and CSS graphics
+          - MANDATORY: Focus on DATA DENSITY and rich textual information
+          - MANDATORY: Use Font Awesome icons, Material Icons, or CSS-generated graphics only
           - MANDATORY: Generate 5x more data content than typical infographics
+          - MANDATORY: Use CSS gradients, shapes, and visual elements instead of images
+          - MANDATORY: Create data visualizations using CSS (progress bars, charts, etc.)
           
           CRITICAL DEBUG REQUIREMENTS:
-          - Each section MUST have a DIFFERENT image URL
-          - Log the image selection reasoning for each section
-          - Ensure images match the detected topic type
-          - Never use the same image URL twice
+          - Each section MUST have appropriate icons and CSS graphics
+          - Log the design approach for each section
+          - Ensure visual elements match the detected topic type
+          - Use unique icons and CSS elements for each section
           
           REQUIREMENTS FOR THIS SPECIFIC INFOGRAPHIC:
           
-          🚨 CRITICAL IMAGE REQUIREMENTS - MANDATORY COMPLIANCE 🚨
-          - MANDATORY: Analyze the prompt topic VERY carefully and select images that DIRECTLY relate to it
-          - MANDATORY: For cricket topics, use ONLY cricket-related images (stadiums, players, equipment, trophies)
-          - MANDATORY: NEVER use the same image in multiple sections - each section must have UNIQUE, relevant images
-          - MANDATORY: Test image URLs before using them - they must be working and accessible
-          - MANDATORY: Use simple, working image URLs from reliable sources
-          - For country topics (Pakistan, India, USA): Use actual flag images from flagcdn.com
-          - For technology topics (AI, blockchain, etc.): Use technology-related images from Unsplash
-          - For business topics: Use business, office, or corporate images
-          - For health topics: Use medical, healthcare, or wellness images
-          - For education topics: Use school, learning, or academic images
-          - For sports topics: Use sports equipment, stadiums, or athletes
-          - For cricket topics (World Cup, cricket stats): Use cricket stadiums, players, equipment, or cricket-related images
-          - For food topics: Use food, restaurant, or cooking images
-          - For travel topics: Use destination, landmark, or travel images
-          - NEVER use mountain, landscape, or unrelated images for sports/cricket topics
-          - NEVER use random or irrelevant images - they must match the prompt topic EXACTLY
-          - If you can't find exact images for specific subcategories, use GENERIC images from the same category
-          - Examples: For "Kolkata biryani" or "Lucknowi biryani" → use generic biryani/food images, NOT keyboard images
-          - For specific cities → use generic city/landmark images if exact city images aren't available
-          - For specific dishes → use generic food/cooking images if exact dish images aren't available
+          🚨 CRITICAL DESIGN REQUIREMENTS - MANDATORY COMPLIANCE 🚨
+          - MANDATORY: Analyze the prompt topic VERY carefully and select appropriate icons and CSS elements
+          - MANDATORY: For cricket topics, use ONLY sports-related icons (trophy, medal, users, chart-bar)
+          - MANDATORY: NEVER use the same icon in multiple sections - each section must have UNIQUE, relevant icons
+          - MANDATORY: Use Font Awesome icons and CSS graphics for all visual elements
+          - MANDATORY: Create rich data visualizations using pure CSS
+          - For country topics (Pakistan, India, USA): Use flag icons and geography-related icons
+          - For technology topics (AI, blockchain, etc.): Use technology-related icons (robot, microchip, code)
+          - For business topics: Use business, office, or corporate icons
+          - For health topics: Use medical, healthcare, or wellness icons
+          - For education topics: Use school, learning, or academic icons
+          - For sports topics: Use sports equipment, stadium, or athlete icons
+          - For cricket topics (World Cup, cricket stats): Use cricket-related icons (trophy, medal, users, chart-bar)
+          - For food topics: Use food, restaurant, or cooking icons
+          - For travel topics: Use destination, landmark, or travel icons
+          - NEVER use unrelated icons - always match the topic context
+          - NEVER use random or irrelevant icons - they must match the prompt topic EXACTLY
+          - If you can't find exact icons for specific subcategories, use GENERIC icons from the same category
+          - Examples: For "Kolkata biryani" or "Lucknowi biryani" → use generic food/cooking icons, NOT tech icons
+          - For specific cities → use generic geography/location icons if exact city icons aren't available
+          - For specific dishes → use generic food/cooking icons if exact dish icons aren't available
           
           CRICKET WORLD CUP SPECIFIC REQUIREMENTS (CRITICAL):
           - For "1992 Cricket World Cup" or similar cricket world cup topics:
-            * Header: MUST search for "cricket world cup" or "cricket tournament" images
-            * Statistics: MUST search for "cricket statistics" or "sports data" images  
-            * Charts: MUST search for "cricket analytics" or "sports charts" images
-            * Content 1: MUST search for "cricket stadium" or "cricket ground" images
-            * Content 2: MUST search for "cricket players" or "cricket team" images
-            * Content 3: MUST search for "cricket trophy" or "cricket championship" images
-            * Footer: MUST search for "cricket celebration" or "cricket victory" images
-          - NEVER use the same image twice - each section needs a DIFFERENT image
-          - NEVER use mountain, landscape, or unrelated images for cricket topics
-          - ALWAYS search for cricket-specific keywords, not generic sports
-          - Each image must be UNIQUE and relevant to cricket world cup context
-          - Always add onerror fallbacks: onerror="this.src='https://picsum.photos/600/400'"
-          - Use website names (Unsplash.com, Pexels.com, Pixabay.com) with specific search terms
-          - Search for relevant images using appropriate keywords that match the topic
-          - DOUBLE-CHECK: Ensure every image is contextually relevant to the prompt topic
-          - IMAGE RELEVANCE TEST: Ask "Would a user immediately understand why this image is here?"
-          - If the answer is NO, find a different image that better relates to the topic
+            * Header: MUST use cricket tournament icons (fas fa-trophy, fas fa-medal)
+            * Statistics: MUST use sports data icons (fas fa-chart-bar, fas fa-chart-line)  
+            * Charts: MUST use analytics icons (fas fa-chart-pie, fas fa-chart-area)
+            * Content 1: MUST use stadium icons (fas fa-building, fas fa-map-marker-alt)
+            * Content 2: MUST use team icons (fas fa-users, fas fa-user-friends)
+            * Content 3: MUST use championship icons (fas fa-crown, fas fa-star)
+            * Footer: MUST use celebration icons (fas fa-fireworks, fas fa-party-horn)
+          - NEVER use the same icon twice - each section needs DIFFERENT icons
+          - NEVER use unrelated icons for cricket topics
+          - ALWAYS use cricket-specific icons, not generic sports icons
+          - Each icon must be UNIQUE and relevant to cricket world cup context
+          - Always use Font Awesome icons with proper classes
+          - Use Font Awesome icon classes with specific icon names that match the topic
+          - Search for relevant icons using appropriate keywords that match the topic
+          - DOUBLE-CHECK: Ensure every icon is contextually relevant to the prompt topic
+          - ICON RELEVANCE TEST: Ask "Would a user immediately understand why this icon is here?"
+          - If the answer is NO, find a different icon that better relates to the topic
           
           CRITICAL ANTI-REPETITION RULES:
-          - MANDATORY: Each section MUST have a DIFFERENT image - NO EXCEPTIONS
-          - MANDATORY: Never use the same image URL in multiple sections
-          - MANDATORY: Each image must be UNIQUE and relevant to its specific section
-          - MANDATORY: For cricket topics, use different cricket-related images for each section
-          - MANDATORY: Check that all images are different before finalizing the infographic
-          - MANDATORY: If you find yourself using the same image, search for a different one
+          - MANDATORY: Each section MUST have DIFFERENT icons - NO EXCEPTIONS
+          - MANDATORY: Never use the same icon in multiple sections
+          - MANDATORY: Each icon must be UNIQUE and relevant to its specific section
+          - MANDATORY: For cricket topics, use different cricket-related icons for each section
+          - MANDATORY: Check that all icons are different before finalizing the infographic
+          - MANDATORY: If you find yourself using the same icon, search for a different one
           
-          SECTION-SPECIFIC IMAGE REQUIREMENTS:
-          - Header section: Use main topic image (flag for countries, main subject image for others)
-          - Statistics section: Use data/analytics related images
-          - Chart section: Use chart/graph related images or topic-specific visuals
-          - Content section 1: Use specific aspect of the topic (e.g., for food topics: cooking, ingredients, etc.)
-          - Content section 2: Use different aspect of the topic (e.g., for food topics: restaurant, dining, etc.)
-          - Content section 3: Use another aspect of the topic (e.g., for food topics: traditional, modern, etc.)
-          - Footer section: Use concluding/summary related images
-          - NEVER repeat the same image in different sections
+          SECTION-SPECIFIC ICON REQUIREMENTS:
+          - Header section: Use main topic icon (flag for countries, main subject icon for others)
+          - Statistics section: Use data/analytics related icons (fas fa-chart-bar, fas fa-chart-line)
+          - Chart section: Use chart/graph related icons or topic-specific icons
+          - Content section 1: Use specific aspect of the topic (e.g., for food topics: fas fa-utensils, fas fa-fire)
+          - Content section 2: Use different aspect of the topic (e.g., for food topics: fas fa-store, fas fa-users)
+          - Content section 3: Use another aspect of the topic (e.g., for food topics: fas fa-leaf, fas fa-clock)
+          - Footer section: Use concluding/summary related icons (fas fa-check-circle, fas fa-star)
+          - NEVER repeat the same icon in different sections
           
           CRICKET/SPORTS TOPIC SECTION REQUIREMENTS:
-          - Header: Cricket/sports main image (NOT mountains or landscapes)
-          - Statistics: Data/analytics charts or sports statistics images
-          - Charts: Sports analytics or cricket-related visualizations
-          - Content 1: Cricket stadium or field images
-          - Content 2: Cricket players or team images
-          - Content 3: Cricket equipment or match images
-          - Footer: Cricket celebration or trophy images
-          - NEVER use mountain, landscape, or unrelated images for any cricket section
+          - Header: Cricket/sports main icon (fas fa-trophy, fas fa-medal)
+          - Statistics: Data/analytics icons (fas fa-chart-bar, fas fa-chart-line)
+          - Charts: Sports analytics icons (fas fa-chart-pie, fas fa-chart-area)
+          - Content 1: Cricket stadium icons (fas fa-building, fas fa-map-marker-alt)
+          - Content 2: Cricket players icons (fas fa-users, fas fa-user-friends)
+          - Content 3: Cricket equipment icons (fas fa-baseball, fas fa-running)
+          - Footer: Cricket celebration icons (fas fa-fireworks, fas fa-party-horn)
+          - NEVER use unrelated icons for any cricket section
           
-          🏏 DYNAMIC CRICKET IMAGE SOURCES (USE MULTIPLE SOURCES):
+          🏏 DYNAMIC CRICKET ICON SOURCES (USE FONT AWESOME):
           
-          SOURCE 1 - UNSPLASH (High Quality):
-          - Search: "cricket world cup", "cricket stadium", "cricket players", "cricket equipment"
-          - Format: https://images.unsplash.com/photo-[ID]?w=600&h=400&fit=crop
-          - Use different photo IDs for each section
+          SOURCE 1 - FONT AWESOME ICONS:
+          - Sports: fas fa-trophy, fas fa-medal, fas fa-award
+          - Data: fas fa-chart-bar, fas fa-chart-line, fas fa-chart-pie
+          - Teams: fas fa-users, fas fa-user-friends, fas fa-user-tie
+          - Venues: fas fa-building, fas fa-map-marker-alt, fas fa-home
           
-          SOURCE 2 - PEXELS (Reliable):
-          - Search: "cricket", "cricket stadium", "cricket players", "sports equipment"
-          - Format: https://images.pexels.com/photos/[ID]/pexels-[photographer]-[ID].jpeg
-          - Use different photo IDs for each section
+          SOURCE 2 - ADDITIONAL FONT AWESOME ICONS:
+          - Equipment: fas fa-baseball, fas fa-running, fas fa-stopwatch
+          - Analytics: fas fa-chart-area, fas fa-chart-gantt, fas fa-percentage
+          - Events: fas fa-calendar, fas fa-clock, fas fa-calendar-alt
           
-          SOURCE 3 - PIXABAY (Diverse):
-          - Search: "cricket", "cricket world cup", "cricket stadium", "cricket players"
-          - Format: https://pixabay.com/get/[ID]-[hash].jpg
-          - Use different photo IDs for each section
+          SOURCE 3 - CSS GRAPHICS:
+          - Create CSS gradients and shapes for visual appeal
+          - Use CSS animations and transitions
+          - Create data visualizations with pure CSS
+          - Use color schemes and typography for hierarchy
           
-          SOURCE 4 - WIKIMEDIA (Official):
-          - Search: "cricket world cup", "cricket stadium", "cricket equipment"
-          - Format: https://upload.wikimedia.org/wikipedia/commons/[path]
-          - Use different images for each section
+          SOURCE 4 - MATERIAL ICONS:
+          - Use Google Material Icons as alternatives
+          - Include SVG icons for better scalability
+          - Use icon fonts for consistent styling
           
-          SOURCE 5 - GOOGLE IMAGES (Fallback):
-          - Search: "cricket world cup", "cricket stadium", "cricket players"
-          - Use reliable, working URLs from Google Images
-          - Test URLs before using them
+          SOURCE 5 - CUSTOM CSS:
+          - Create custom CSS shapes and patterns
+          - Use CSS pseudo-elements for decorative elements
+          - Implement CSS Grid and Flexbox for layouts
           
-          🎯 DYNAMIC SOURCE SELECTION FOR DIFFERENT TOPICS:
+          🎯 DYNAMIC ICON SELECTION FOR DIFFERENT TOPICS:
           
           FOR FOOD TOPICS (biryani, Indian cuisine, etc.):
-          - Unsplash: "food", "cooking", "restaurant", "cuisine"
-          - Pexels: "food", "cooking", "kitchen", "dining"
-          - Pixabay: "food", "cooking", "restaurant", "cuisine"
-          - Wikimedia: "food", "cuisine", "cooking"
+          - Font Awesome: fas fa-utensils, fas fa-fire, fas fa-leaf, fas fa-store
+          - Material Icons: restaurant, kitchen, local_dining, food_bank
+          - CSS Graphics: gradients, shapes, animations
           
           FOR TECHNOLOGY TOPICS (AI, blockchain, etc.):
-          - Unsplash: "technology", "artificial intelligence", "digital"
-          - Pexels: "technology", "AI", "computer", "digital"
-          - Pixabay: "technology", "artificial intelligence", "digital"
-          - Wikimedia: "technology", "artificial intelligence"
+          - Font Awesome: fas fa-robot, fas fa-microchip, fas fa-code, fas fa-laptop
+          - Material Icons: computer, memory, code, developer_mode
+          - CSS Graphics: tech-inspired gradients, geometric patterns
           
           FOR COUNTRY TOPICS (Pakistan, India, etc.):
-          - Flagcdn: Country flags (flagcdn.com/w320/[country-code].png)
-          - Unsplash: "country name", "landmarks", "culture"
-          - Pexels: "country name", "landmarks", "heritage"
-          - Wikimedia: "country name", "landmarks", "official images"
+          - Font Awesome: fas fa-flag, fas fa-map, fas fa-building, fas fa-landmark
+          - Material Icons: flag, location_city, public, account_balance
+          - CSS Graphics: national color schemes, geometric patterns
           
-          🚨 DYNAMIC SELECTION STRATEGY:
-          - For Header: Search for "cricket world cup" across multiple sources
-          - For Statistics: Search for "cricket statistics" or "sports data"
-          - For Charts: Search for "cricket stadium" or "sports venue"
-          - For Content 1: Search for "cricket players" or "cricket team"
-          - For Content 2: Search for "cricket equipment" or "cricket gear"
-          - For Content 3: Search for "cricket celebration" or "cricket trophy"
-          - For Footer: Search for "cricket victory" or "cricket championship"
-          - Each section MUST use a DIFFERENT source and image
-          - Test URLs and use fallbacks if they don't work
+          🚨 DYNAMIC ICON SELECTION STRATEGY:
+          - For Header: Use main topic icon (trophy, flag, etc.)
+          - For Statistics: Use data/analytics icons (chart-bar, chart-line)
+          - For Charts: Use chart/graph icons (chart-pie, chart-area)
+          - For Content 1: Use team/player icons (users, user-friends)
+          - For Content 2: Use equipment icons (baseball, running)
+          - For Content 3: Use celebration icons (fireworks, party-horn)
+          - For Footer: Use victory icons (trophy, star, check-circle)
+          - Each section MUST use DIFFERENT icons and CSS elements
+          - Use consistent icon styling and CSS classes
           
           1. ULTRA-HIGH CONTENT DENSITY: Generate 5x more data than typical infographics:
              - Include 30-50 key statistics, facts, or data points

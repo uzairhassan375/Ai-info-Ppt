@@ -23,22 +23,37 @@ class InfographicViewerView extends GetView<InfographicViewerController> {
           onPressed: () => Get.back(),
         ),
         actions: [
-          Obx(
-            () => IconButton(
-              onPressed: controller.isDownloading.value
-                  ? null
-                  : controller.downloadAsPng,
-              icon: controller.isDownloading.value
-                  ? const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                      ),
-                    )
-                  : const Icon(Icons.download, color: Colors.white),
-            ),
+          PopupMenuButton<String>(
+            icon: const Icon(Icons.download, color: Colors.white),
+            onSelected: (value) {
+              if (value == 'png') {
+                controller.downloadAsPng();
+              } else if (value == 'ppt') {
+                controller.downloadAsPPT();
+              }
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 'png',
+                child: Row(
+                  children: [
+                    Icon(Icons.image, color: Color(0xFF6C63FF)),
+                    SizedBox(width: 8),
+                    Text('Download as PNG'),
+                  ],
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'ppt',
+                child: Row(
+                  children: [
+                    Icon(Icons.picture_as_pdf, color: Color(0xFF6C63FF)),
+                    SizedBox(width: 8),
+                    Text('Download as PPT'),
+                  ],
+                ),
+              ),
+            ],
           ),
           IconButton(
             onPressed: controller.regenerateInfographic,
@@ -190,59 +205,103 @@ class InfographicViewerView extends GetView<InfographicViewerController> {
               // Action Buttons
               Container(
                 padding: const EdgeInsets.all(16),
-                child: Row(
+                child: Column(
                   children: [
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        onPressed: controller.regenerateInfographic,
-                        icon: const Icon(Icons.refresh),
-                        label: const Text('Generate New'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.grey[100],
-                          foregroundColor: Colors.grey[700],
-                          elevation: 0,
-                          padding: const EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Obx(
-                        () => ElevatedButton.icon(
-                          onPressed: controller.isDownloading.value
-                              ? null
-                              : controller.downloadAsPng,
-                          icon: controller.isDownloading.value
-                              ? const SizedBox(
-                                  width: 16,
-                                  height: 16,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.white,
-                                    ),
-                                  ),
-                                )
-                              : const Icon(Icons.download),
-                          label: Text(
-                            controller.isDownloading.value
-                                ? 'Downloading...'
-                                : 'Download PNG',
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF6C63FF),
-                            foregroundColor: Colors.white,
-                            elevation: 0,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: controller.regenerateInfographic,
+                            icon: const Icon(Icons.refresh),
+                            label: const Text('Generate New'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.grey[100],
+                              foregroundColor: Colors.grey[700],
+                              elevation: 0,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Obx(
+                            () => ElevatedButton.icon(
+                              onPressed: controller.isDownloading.value
+                                  ? null
+                                  : controller.downloadAsPng,
+                              icon: controller.isDownloading.value
+                                  ? const SizedBox(
+                                      width: 16,
+                                      height: 16,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        valueColor: AlwaysStoppedAnimation<Color>(
+                                          Colors.white,
+                                        ),
+                                      ),
+                                    )
+                                  : const Icon(Icons.image),
+                              label: Text(
+                                controller.isDownloading.value
+                                    ? 'Downloading...'
+                                    : 'Download PNG',
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF4CAF50),
+                                foregroundColor: Colors.white,
+                                elevation: 0,
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Obx(
+                            () => ElevatedButton.icon(
+                              onPressed: controller.isDownloadingPPT.value
+                                  ? null
+                                  : controller.downloadAsPPT,
+                              icon: controller.isDownloadingPPT.value
+                                  ? const SizedBox(
+                                      width: 16,
+                                      height: 16,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        valueColor: AlwaysStoppedAnimation<Color>(
+                                          Colors.white,
+                                        ),
+                                      ),
+                                    )
+                                  : const Icon(Icons.picture_as_pdf),
+                              label: Text(
+                                controller.isDownloadingPPT.value
+                                    ? 'Generating...'
+                                    : 'Download PPT',
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF6C63FF),
+                                foregroundColor: Colors.white,
+                                elevation: 0,
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

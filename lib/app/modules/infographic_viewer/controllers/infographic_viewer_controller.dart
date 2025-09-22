@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:screenshot/screenshot.dart';
 import '../../../data/models/infographic_model.dart';
+import '../../../data/services/ppt_service.dart';
 
 class InfographicViewerController extends GetxController {
   late InfographicModel infographic;
@@ -15,6 +16,7 @@ class InfographicViewerController extends GetxController {
   
   final isLoading = true.obs;
   final isDownloading = false.obs;
+  final isDownloadingPPT = false.obs;
   final isEditing = false.obs;
   final editingText = ''.obs;
   final editingElementId = ''.obs;
@@ -178,6 +180,48 @@ class InfographicViewerController extends GetxController {
       );
     } finally {
       isDownloading.value = false;
+    }
+  }
+
+  Future<void> downloadAsPPT() async {
+    try {
+      isDownloadingPPT.value = true;
+      
+      // Show progress message
+      Get.snackbar(
+        "Generating PPT",
+        "Creating PowerPoint presentation with perfectly aligned content...",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.blue.shade100,
+        colorText: Colors.blue.shade800,
+        duration: Duration(seconds: 2),
+      );
+
+      // Generate PowerPoint
+      final filePath = await PPTService.generatePPT(infographic);
+      
+      if (filePath != null) {
+        Get.snackbar(
+          'Success',
+          'PowerPoint presentation saved successfully!',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green[100],
+          colorText: Colors.green[800],
+          duration: const Duration(seconds: 4),
+        );
+      } else {
+        throw Exception('Failed to generate PowerPoint presentation');
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Error',
+        'Failed to generate PowerPoint: ${e.toString()}',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red[100],
+        colorText: Colors.red[800],
+      );
+    } finally {
+      isDownloadingPPT.value = false;
     }
   }
 
