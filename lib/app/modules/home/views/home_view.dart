@@ -84,27 +84,32 @@ class HomeView extends GetView<HomeController> {
                           horizontal: 24,
                           vertical: 20,
                         ),
-                        suffixIcon: Container(
-                          margin: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF2C3E50),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: controller.isLoading.value
-                              ? const SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                        suffixIcon: Obx(() => GestureDetector(
+                          onTap: controller.isLoading.value ? null : () {
+                            controller.generateInfographic();
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF2C3E50),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: controller.isLoading.value
+                                ? const SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                    ),
+                                  )
+                                : const Icon(
+                                    Icons.arrow_forward,
+                                    color: Colors.white,
+                                    size: 20,
                                   ),
-                                )
-                              : const Icon(
-                                  Icons.arrow_forward,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                        ),
+                          ),
+                        )),
                       ),
                       onChanged: (value) => controller.clearError(),
                       onSubmitted: (value) => controller.generateInfographic(),
@@ -162,7 +167,7 @@ class HomeView extends GetView<HomeController> {
                         Text(
                           'AI that sees beyond limits ✨',
                           style: TextStyle(
-                            fontSize: 14,
+                        fontSize: 14,
                             color: Colors.white70,
                           ),
                         ),
@@ -176,40 +181,6 @@ class HomeView extends GetView<HomeController> {
             ),
           ),
           
-          // Loading Overlay
-          Obx(() => controller.isLoading.value
-              ? Container(
-                  color: Colors.black.withValues(alpha: 0.3),
-                  child: const Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                          strokeWidth: 3,
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          'Creating your visualization...',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          'This may take a few moments',
-                          style: TextStyle(
-                            color: Colors.white70,
-                        fontSize: 14,
-                      ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              : const SizedBox.shrink()),
 
           // Error Message (if any)
                   Obx(() => controller.errorMessage.value.isNotEmpty
@@ -248,7 +219,7 @@ class HomeView extends GetView<HomeController> {
     return Obx(() => GestureDetector(
       onTap: controller.isLoading.value ? null : () {
         controller.promptController.text = text;
-        controller.generateInfographic();
+        // Don't auto-generate, let user press Enter or click arrow
       },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

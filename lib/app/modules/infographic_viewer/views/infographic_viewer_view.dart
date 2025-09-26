@@ -7,6 +7,47 @@ import '../controllers/infographic_viewer_controller.dart';
 class InfographicViewerView extends GetView<InfographicViewerController> {
   const InfographicViewerView({super.key});
 
+  void _showShareOptions() {
+    Get.dialog(
+      AlertDialog(
+        title: const Text('Share Options'),
+        content: const Text('Choose how you would like to share the infographic:'),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton.icon(
+            onPressed: () {
+              Get.back();
+              // Share as PNG
+              controller.downloadAsPng();
+            },
+            icon: const Icon(Icons.image),
+            label: const Text('Share as Image'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
+            ),
+          ),
+          ElevatedButton.icon(
+            onPressed: () {
+              Get.back();
+              // Share as PDF
+              controller.downloadAsPDF();
+            },
+            icon: const Icon(Icons.picture_as_pdf),
+            label: const Text('Share as PDF'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF6C63FF),
+              foregroundColor: Colors.white,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,19 +69,19 @@ class InfographicViewerView extends GetView<InfographicViewerController> {
             onSelected: (value) {
               if (value == 'png') {
                 controller.downloadAsPng();
-              } else if (value == 'ppt') {
-                controller.downloadAsPPT();
+              } else if (value == 'pdf') {
+                controller.downloadAsPDF();
               }
             },
             itemBuilder: (context) => [
               // PNG download option hidden
               const PopupMenuItem(
-                value: 'ppt',
+                value: 'pdf',
                 child: Row(
                   children: [
                     Icon(Icons.picture_as_pdf, color: Color(0xFF6C63FF)),
                     SizedBox(width: 8),
-                    Text('Download as PPT'),
+                    Text('Download as PDF'),
                   ],
                 ),
               ),
@@ -49,6 +90,10 @@ class InfographicViewerView extends GetView<InfographicViewerController> {
           IconButton(
             onPressed: controller.regenerateInfographic,
             icon: const Icon(Icons.refresh, color: Colors.white),
+          ),
+          IconButton(
+            onPressed: controller.testPermissions,
+            icon: const Icon(Icons.security, color: Colors.white),
           ),
         ],
       ),
@@ -227,7 +272,7 @@ class InfographicViewerView extends GetView<InfographicViewerController> {
                             () => ElevatedButton.icon(
                               onPressed: controller.isDownloadingPPT.value
                                   ? null
-                                  : controller.downloadAsPPT,
+                                  : controller.downloadAsPDF,
                               icon: controller.isDownloadingPPT.value
                                   ? const SizedBox(
                                       width: 16,
@@ -243,7 +288,7 @@ class InfographicViewerView extends GetView<InfographicViewerController> {
                               label: Text(
                                 controller.isDownloadingPPT.value
                                     ? 'Generating...'
-                                    : 'Download PPT',
+                                    : 'Download PDF',
                               ),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF6C63FF),
@@ -253,6 +298,25 @@ class InfographicViewerView extends GetView<InfographicViewerController> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Obx(
+                          () => ElevatedButton.icon(
+                            onPressed: controller.isDownloadingPPT.value
+                                ? null
+                                : () => _showShareOptions(),
+                            icon: const Icon(Icons.share),
+                            label: const Text('Share'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green,
+                              foregroundColor: Colors.white,
+                              elevation: 0,
+                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
                               ),
                             ),
                           ),

@@ -6,8 +6,9 @@ import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../../data/models/infographic_model.dart';
-import '../../../data/services/ppt_service.dart';
+import '../../../data/services/pdf_service.dart';
 
 class InfographicViewerController extends GetxController {
   late InfographicModel infographic;
@@ -187,14 +188,196 @@ class InfographicViewerController extends GetxController {
     }
   }
 
-  Future<void> downloadAsPPT() async {
+  Future<void> testPermissions() async {
+    print('🔍 Testing permissions...');
+    
+    // Test storage permission
+    final storageStatus = await Permission.storage.status;
+    print('🔍 Storage permission status: $storageStatus');
+    
+    // Test photos permission
+    try {
+      final photosStatus = await Permission.photos.status;
+      print('🔍 Photos permission status: $photosStatus');
+    } catch (e) {
+      print('🔍 Photos permission error: $e');
+    }
+    
+    // Test manage external storage
+    try {
+      final manageStatus = await Permission.manageExternalStorage.status;
+      print('🔍 Manage external storage status: $manageStatus');
+    } catch (e) {
+      print('🔍 Manage external storage error: $e');
+    }
+  }
+
+  Future<void> _sharePDF(String filePath) async {
+    try {
+      print('📤 Sharing PDF: $filePath');
+      
+      // Check if file exists
+      final file = File(filePath);
+      if (!file.existsSync()) {
+        Get.snackbar(
+          'Error',
+          'PDF file not found',
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.red[100],
+          colorText: Colors.red[800],
+        );
+        return;
+      }
+      
+      // Share the PDF file
+      await Share.shareXFiles(
+        [XFile(filePath)],
+        text: 'Check out this infographic I created with AI Visualizer!',
+        subject: 'AI Visualizer - ${infographic.prompt}',
+      );
+      
+      print('📤 PDF shared successfully');
+    } catch (e) {
+      print('📤 Error sharing PDF: $e');
+      Get.snackbar(
+        'Error',
+        'Failed to share PDF: ${e.toString()}',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red[100],
+        colorText: Colors.red[800],
+      );
+    }
+  }
+
+  void _showShareDialog(String filePath) {
+    Get.dialog(
+      AlertDialog(
+        title: const Text('PDF Generated Successfully!'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text('Your infographic PDF has been saved successfully.'),
+            const SizedBox(height: 10),
+            Text(
+              'Location: $filePath',
+              style: const TextStyle(fontSize: 12, color: Colors.grey),
+            ),
+            const SizedBox(height: 15),
+            const Text('Would you like to share it?'),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: const Text('Close'),
+          ),
+          ElevatedButton.icon(
+            onPressed: () {
+              Get.back();
+              _sharePDF(filePath);
+            },
+            icon: const Icon(Icons.share),
+            label: const Text('Share PDF'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF6C63FF),
+              foregroundColor: Colors.white,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> downloadAsPDF() async {
     try {
       isDownloadingPPT.value = true;
       
+      // Test permissions first
+      await testPermissions();
+      
+      // Request storage permission first
+      print('📄 PDF: Requesting storage permission...');
+      
+      // Try to request storage permission
+      PermissionStatus permissionStatus = await Permission.storage.request();
+      print('📄 PDF: Storage permission status: $permissionStatus');
+      
+      // If storage permission is denied, try photos permission (Android 13+)
+      if (permissionStatus.isDenied || permissionStatus.isPermanentlyDenied) {
+        print('📄 PDF: Trying photos permission...');
+        permissionStatus = await Permission.photos.request();
+        print('📄 PDF: Photos permission status: $permissionStatus');
+      }
+      
+      // If still not granted, show dialog to user
+      if (!permissionStatus.isGranted) {
+        print('📄 PDF: Permission not granted, showing dialog...');
+        
+        // Show dialog asking user to grant permission
+        final shouldContinue = await Get.dialog<bool>(
+          AlertDialog(
+            title: const Text('Storage Permission Required'),
+            content: const Text(
+              'This app needs storage permission to save the PDF file. Please grant permission to continue.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Get.back(result: false),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () => Get.back(result: true),
+                child: const Text('Grant Permission'),
+              ),
+            ],
+          ),
+        );
+        
+        if (shouldContinue == true) {
+          // Try requesting permission again
+          permissionStatus = await Permission.storage.request();
+          if (!permissionStatus.isGranted) {
+            permissionStatus = await Permission.photos.request();
+          }
+          
+          if (!permissionStatus.isGranted) {
+            // Show dialog to open app settings
+            final openSettings = await Get.dialog<bool>(
+              AlertDialog(
+                title: const Text('Permission Required'),
+                content: const Text(
+                  'Storage permission is required to save PDF files. Please enable it in app settings.',
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Get.back(result: false),
+                    child: const Text('Cancel'),
+                  ),
+                  TextButton(
+                    onPressed: () => Get.back(result: true),
+                    child: const Text('Open Settings'),
+                  ),
+                ],
+              ),
+            );
+            
+            if (openSettings == true) {
+              await openAppSettings();
+            }
+            return;
+          }
+        } else {
+          return;
+        }
+      }
+      
+      print('📄 PDF: Permission granted: $permissionStatus');
+      
       // Show progress message
       Get.snackbar(
-        "Generating PPT",
-        "Capturing section screenshots and creating PowerPoint presentation...",
+        "Generating PDF",
+        "Capturing section screenshots and creating PDF document...",
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.blue.shade100,
         colorText: Colors.blue.shade800,
@@ -204,25 +387,26 @@ class InfographicViewerController extends GetxController {
       // Capture screenshots of each section
       await _captureSectionScreenshots();
 
-      // Generate PowerPoint with screenshots
-      final filePath = await PPTService.generatePPTWithScreenshots(infographic, sectionScreenshots);
+      // Generate PDF with screenshots
+      final filePath = await PDFService.generatePDFWithScreenshots(infographic.prompt, sectionScreenshots);
       
-      if (filePath != null) {
-        Get.snackbar(
-          'Success',
-          'PowerPoint presentation saved successfully!',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.green[100],
-          colorText: Colors.green[800],
-          duration: const Duration(seconds: 4),
-        );
-      } else {
-        throw Exception('Failed to generate PowerPoint presentation');
-      }
+      // Show success message
+      Get.snackbar(
+        'Success',
+        'PDF document saved successfully!',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.green[100],
+        colorText: Colors.green[800],
+        duration: const Duration(seconds: 4),
+      );
+      
+      // Also show a dialog with share option
+      _showShareDialog(filePath);
     } catch (e) {
+      print('📄 PDF: Error generating PDF: $e');
       Get.snackbar(
         'Error',
-        'Failed to generate PowerPoint: ${e.toString()}',
+        'Failed to generate PDF: ${e.toString()}',
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.red[100],
         colorText: Colors.red[800],
@@ -236,34 +420,56 @@ class InfographicViewerController extends GetxController {
     try {
       sectionScreenshots.clear();
       
+      print('📸 Starting screenshot capture process...');
+      
+      // Always capture the full infographic first as a reliable fallback
+      final fullScreenshot = await screenshotController.capture();
+      if (fullScreenshot != null && fullScreenshot.isNotEmpty) {
+        sectionScreenshots[0] = fullScreenshot;
+        print('📸 Captured full infographic (${fullScreenshot.length} bytes)');
+      } else {
+        print('❌ Failed to capture full infographic');
+        return;
+      }
+      
       // Get the number of sections from the HTML
       final sectionCount = _countSectionsInHTML();
       print('📸 Found $sectionCount sections in HTML');
       
-      if (sectionCount == 0) {
-        // Fallback: capture the entire infographic as one section
-        final fullScreenshot = await screenshotController.capture();
-        if (fullScreenshot != null) {
-          sectionScreenshots[0] = fullScreenshot;
-          print('📸 Captured full infographic as single section');
+      if (sectionCount > 1) {
+        // Try to capture individual sections
+        await _captureEachSectionIndividually(sectionCount);
+        print('📸 Attempted to capture $sectionCount individual sections');
+      } else {
+        print('📸 Only one section detected, using full screenshot for all slides');
+        // If only one section, use the full screenshot for multiple slides
+        for (int i = 1; i < 6; i++) { // Create 5 additional slides with the same screenshot
+          sectionScreenshots[i] = fullScreenshot;
         }
-        return;
       }
       
-      // Capture each section individually by scrolling and taking screenshots
-      await _captureEachSectionIndividually(sectionCount);
-      
       print('📸 Successfully captured ${sectionScreenshots.length} section screenshots');
+      for (final entry in sectionScreenshots.entries) {
+        print('📸 Section ${entry.key}: ${entry.value.length} bytes');
+      }
     } catch (e) {
       print('❌ Error capturing section screenshots: $e');
-      throw Exception('Failed to capture section screenshots: $e');
+      // Ensure we have at least one screenshot
+      if (sectionScreenshots.isEmpty) {
+        final fullScreenshot = await screenshotController.capture();
+        if (fullScreenshot != null && fullScreenshot.isNotEmpty) {
+          sectionScreenshots[0] = fullScreenshot;
+          print('📸 Used full screenshot as final fallback');
+        }
+      }
     }
   }
 
   Future<void> _captureEachSectionIndividually(int sectionCount) async {
     try {
       if (webViewController == null) {
-        throw Exception('WebView controller not available');
+        print('❌ WebView controller not available');
+        return;
       }
 
       // Start from the top
@@ -276,42 +482,37 @@ class InfographicViewerController extends GetxController {
           
           // Scroll to the specific section
           await _scrollToSection(i);
-          await Future.delayed(Duration(milliseconds: 800));
+          await Future.delayed(Duration(milliseconds: 1000));
           
           // Wait for content to load
-          await Future.delayed(Duration(milliseconds: 500));
+          await Future.delayed(Duration(milliseconds: 800));
           
           // Capture the current view
           final screenshot = await screenshotController.capture();
-          if (screenshot != null && screenshot.length > 0) {
+          if (screenshot != null && screenshot.isNotEmpty) {
             sectionScreenshots[i] = screenshot;
             print('✅ Successfully captured section $i (${screenshot.length} bytes)');
           } else {
             print('❌ Failed to capture section $i - screenshot is null or empty');
-            // Try capturing the full view as fallback
-            final fullScreenshot = await screenshotController.capture();
-            if (fullScreenshot != null && fullScreenshot.length > 0) {
-              sectionScreenshots[i] = fullScreenshot;
+            // Use the full screenshot as fallback for this section
+            if (sectionScreenshots.containsKey(0)) {
+              sectionScreenshots[i] = sectionScreenshots[0]!;
               print('📸 Used full screenshot as fallback for section $i');
             }
           }
         } catch (e) {
           print('❌ Failed to capture section $i: $e');
-          // Continue with next section
+          // Use the full screenshot as fallback for this section
+          if (sectionScreenshots.containsKey(0)) {
+            sectionScreenshots[i] = sectionScreenshots[0]!;
+            print('📸 Used full screenshot as fallback for section $i after error');
+          }
         }
       }
       
-      // Ensure we have at least one screenshot
-      if (sectionScreenshots.isEmpty) {
-        print('📸 No screenshots captured, using full screenshot as fallback');
-        final fullScreenshot = await screenshotController.capture();
-        if (fullScreenshot != null && fullScreenshot.length > 0) {
-          sectionScreenshots[0] = fullScreenshot;
-        }
-      }
+      print('📸 Individual section capture completed. Total screenshots: ${sectionScreenshots.length}');
     } catch (e) {
       print('❌ Error in section capture: $e');
-      throw Exception('Failed to capture sections: $e');
     }
   }
 

@@ -33,6 +33,9 @@ class GeminiService {
         ),
       ),
       systemInstruction: Content.text('''You are a professional infographic designer and data visualization expert.
+
+CRITICAL REQUIREMENT: Respond ONLY with valid JSON. Do not include raw CSS or unescaped HTML.
+
 respond with ONLY a JSON object in this exact format:
 {
   "html": "Complete HTML File code including head and body. head should contain all the resources we are using in body like any icons or other stuff for the infographic content.complete file structure",
