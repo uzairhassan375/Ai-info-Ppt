@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:infography/app/data/models/infographic_model.dart';
 import '../../../data/services/gemini_service.dart';
 import '../../../routes/app_pages.dart';
 import 'dart:developer' as dp;

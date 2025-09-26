@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter_pptx/flutter_pptx.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:get/get.dart';
@@ -7,7 +8,67 @@ import '../models/infographic_model.dart';
 import 'package:flutter/material.dart';
 
 class PPTService {
-  /// Generate PowerPoint presentation from infographic data
+  /// Generate PowerPoint presentation from infographic data with screenshots
+  static Future<String?> generatePPTWithScreenshots(InfographicModel infographic, Map<int, Uint8List> sectionScreenshots) async {
+    try {
+      print('🔍 PPT: Starting PowerPoint generation with screenshots...');
+      print('🔍 PPT: Processing ${sectionScreenshots.length} screenshots');
+      
+      // Create new PowerPoint presentation
+      final pres = FlutterPowerPoint();
+      
+      // Add title slide
+      _addTitleSlide(pres, infographic.prompt);
+      
+      // Save screenshots to temporary files and add slides
+      final screenshotPaths = <int, String>{};
+      for (int i = 0; i < sectionScreenshots.length; i++) {
+        final screenshot = sectionScreenshots[i];
+        if (screenshot != null) {
+          print('🔍 PPT: Processing section $i with ${screenshot.length} bytes');
+          
+          // Save screenshot to temporary file
+          final screenshotPath = await _saveScreenshotToFile(screenshot, i);
+          screenshotPaths[i] = screenshotPath;
+          
+          // Add slide with actual screenshot image
+          _addScreenshotSlideWithPath(pres, screenshotPath, 'Section ${i + 1}');
+        } else {
+          print('🔍 PPT: Warning - Section $i screenshot is null');
+        }
+      }
+      
+      // Summary slide removed as requested
+      
+      // Generate PowerPoint bytes
+      final bytes = await pres.save();
+      print('🔍 PPT: PowerPoint generated successfully with screenshots, size: ${bytes?.length ?? 0} bytes');
+      
+      // Save to file
+      if (bytes != null) {
+        final filePath = await _savePPTFile(bytes, infographic.prompt);
+        
+        // Clean up temporary screenshot files
+        await _cleanupTempScreenshots(screenshotPaths);
+        
+        return filePath;
+      } else {
+        throw Exception('Failed to generate PowerPoint bytes');
+      }
+    } catch (e) {
+      print('🔍 PPT: Error generating PowerPoint with screenshots: $e');
+      Get.snackbar(
+        "Error",
+        "Failed to generate PowerPoint: $e",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.red.shade100,
+        colorText: Colors.red.shade800,
+      );
+      return null;
+    }
+  }
+
+  /// Generate PowerPoint presentation from infographic data (legacy method)
   static Future<String?> generatePPT(InfographicModel infographic) async {
     try {
       print('🔍 PPT: Starting PowerPoint generation...');
@@ -19,13 +80,13 @@ class PPTService {
       final slideData = _parseInfographicData(infographic.htmlCode);
       
       // Add title slide
-      _addTitleSlide(pres, infographic.prompt, slideData);
+      _addTitleSlideLegacy(pres, infographic.prompt, slideData);
       
       // Add content slides based on parsed data
       _addContentSlides(pres, slideData);
       
       // Add summary slide
-      _addSummarySlide(pres, slideData);
+      _addSummarySlideLegacy(pres, slideData);
       
       // Generate PowerPoint bytes
       final bytes = await pres.save();
@@ -194,8 +255,178 @@ class PPTService {
     }
   }
   
-  /// Add title slide to presentation
-  static void _addTitleSlide(FlutterPowerPoint pres, String prompt, Map<String, dynamic> slideData) {
+  /// Add title slide to presentation (screenshot version)
+  static void _addTitleSlide(FlutterPowerPoint pres, String prompt) {
+    pres.addTitleSlide(
+      title: prompt.toTextValue(),
+      author: 'Generated Infographic'.toTextValue(),
+    );
+    
+    print('🔍 PPT: Added title slide - $prompt');
+  }
+
+  /// Add screenshot slide to presentation with file path
+  static void _addScreenshotSlideWithPath(FlutterPowerPoint pres, String screenshotPath, String sectionTitle) {
+    try {
+      // Create more descriptive slide titles based on section number
+      String slideTitle = _getSectionTitle(sectionTitle);
+      
+      // Add the actual screenshot as a photo slide
+      pres.addPhotoSlide(
+        image: ImageReference(
+          path: screenshotPath,
+          name: slideTitle,
+        ),
+      );
+      
+      print('🔍 PPT: Added screenshot slide - $slideTitle from $screenshotPath');
+    } catch (e) {
+      print('🔍 PPT: Error adding screenshot slide: $e');
+      // Fallback to text-only slide
+      pres.addTitleAndBulletsSlide(
+        title: sectionTitle.toTextValue(),
+        subtitle: 'Infographic Section'.toTextValue(),
+        bullets: [
+          'Section content captured'.toTextValue(),
+          'Data visualization included'.toTextValue(),
+        ],
+      );
+    }
+  }
+
+  /// Add screenshot slide to presentation (legacy method)
+  static void _addScreenshotSlide(FlutterPowerPoint pres, Uint8List screenshot, String sectionTitle) {
+    try {
+      // Create more descriptive slide titles based on section number
+      String slideTitle = _getSectionTitle(sectionTitle);
+      
+      // Add the actual screenshot as a photo slide
+      pres.addPhotoSlide(
+        image: ImageReference(
+          path: '', // We'll set this when we have the file path
+          name: slideTitle,
+        ),
+      );
+      
+      print('🔍 PPT: Added screenshot slide - $slideTitle (${screenshot.length} bytes)');
+    } catch (e) {
+      print('🔍 PPT: Error adding screenshot slide: $e');
+      // Fallback to text-only slide
+      pres.addTitleAndBulletsSlide(
+        title: sectionTitle.toTextValue(),
+        subtitle: 'Infographic Section'.toTextValue(),
+        bullets: [
+          'Section content captured'.toTextValue(),
+          'Data visualization included'.toTextValue(),
+        ],
+      );
+    }
+  }
+
+  /// Get descriptive title based on section number
+  static String _getSectionTitle(String sectionTitle) {
+    if (sectionTitle.contains('Section 1')) return 'Title & Overview';
+    if (sectionTitle.contains('Section 2')) return 'Executive Summary';
+    if (sectionTitle.contains('Section 3')) return 'Key Statistics';
+    if (sectionTitle.contains('Section 4')) return 'Detailed Analysis';
+    if (sectionTitle.contains('Section 5')) return 'Data Visualizations';
+    if (sectionTitle.contains('Section 6')) return 'Key Insights';
+    if (sectionTitle.contains('Section 7')) return 'Conclusion';
+    if (sectionTitle.contains('Section 8')) return 'Additional Data';
+    return sectionTitle;
+  }
+
+  /// Get descriptive subtitle based on section number
+  static String _getSectionSubtitle(String sectionTitle) {
+    if (sectionTitle.contains('Section 1')) return 'Main Topic Introduction';
+    if (sectionTitle.contains('Section 2')) return 'Key Highlights & Overview';
+    if (sectionTitle.contains('Section 3')) return 'Important Data Points';
+    if (sectionTitle.contains('Section 4')) return 'In-Depth Analysis';
+    if (sectionTitle.contains('Section 5')) return 'Charts & Graphs';
+    if (sectionTitle.contains('Section 6')) return 'Expert Insights';
+    if (sectionTitle.contains('Section 7')) return 'Summary & Takeaways';
+    if (sectionTitle.contains('Section 8')) return 'Supporting Information';
+    return 'Infographic Section';
+  }
+
+  /// Get relevant bullets based on section number
+  static List<String> _getSectionBullets(String sectionTitle) {
+    if (sectionTitle.contains('Section 1')) {
+      return [
+        '📊 Main topic introduction',
+        '🎯 Key focus areas highlighted',
+        '📱 Mobile-optimized 16:9 format',
+      ];
+    } else if (sectionTitle.contains('Section 2')) {
+      return [
+        '📋 Executive summary points',
+        '⭐ Key highlights and overview',
+        '📈 Important preliminary data',
+      ];
+    } else if (sectionTitle.contains('Section 3')) {
+      return [
+        '📊 Critical statistics and numbers',
+        '📈 Data-driven insights',
+        '🎯 Key performance indicators',
+      ];
+    } else if (sectionTitle.contains('Section 4')) {
+      return [
+        '🔍 Detailed analysis points',
+        '📝 In-depth bullet points',
+        '💡 Supporting evidence and data',
+      ];
+    } else if (sectionTitle.contains('Section 5')) {
+      return [
+        '📊 Visual data representations',
+        '📈 Charts and graphs',
+        '🎨 Professional visualizations',
+      ];
+    } else if (sectionTitle.contains('Section 6')) {
+      return [
+        '💡 Key insights and takeaways',
+        '🎯 Expert recommendations',
+        '📋 Actionable points',
+      ];
+    } else if (sectionTitle.contains('Section 7')) {
+      return [
+        '📝 Summary of key points',
+        '🎯 Call-to-action items',
+        '💡 Final thoughts and conclusions',
+      ];
+    } else if (sectionTitle.contains('Section 8')) {
+      return [
+        '📊 Additional supporting data',
+        '📈 Complementary statistics',
+        '🔍 Extended information',
+      ];
+    }
+    return [
+      'High-quality 16:9 section capture',
+      'Optimized for mobile portrait viewing',
+      'Professional data visualization',
+    ];
+  }
+
+  /// Add summary slide (screenshot version)
+  static void _addSummarySlide(FlutterPowerPoint pres, int sectionCount) {
+    final summaryPoints = <String>[
+      '📊 $sectionCount sections captured in 16:9 format',
+      '📱 Optimized for mobile portrait viewing',
+      '📈 Professional data visualizations included',
+      '🎨 High-quality section screenshots',
+    ];
+    
+    pres.addTitleAndBulletsSlide(
+      title: 'Summary'.toTextValue(),
+      subtitle: 'Key Takeaways'.toTextValue(),
+      bullets: summaryPoints.map((e) => e.toTextValue()).toList(),
+    );
+    
+    print('🔍 PPT: Added summary slide with $sectionCount sections');
+  }
+
+  /// Add title slide to presentation (legacy version)
+  static void _addTitleSlideLegacy(FlutterPowerPoint pres, String prompt, Map<String, dynamic> slideData) {
     final title = slideData['title']?.toString().isNotEmpty == true 
         ? slideData['title'].toString() 
         : prompt;
@@ -261,8 +492,8 @@ class PPTService {
     }
   }
   
-  /// Add summary slide
-  static void _addSummarySlide(FlutterPowerPoint pres, Map<String, dynamic> slideData) {
+  /// Add summary slide (legacy version)
+  static void _addSummarySlideLegacy(FlutterPowerPoint pres, Map<String, dynamic> slideData) {
     final summaryPoints = <String>[];
     
     // Add key statistics as summary points
@@ -401,6 +632,44 @@ class PPTService {
       return pptDir.path;
     } catch (e) {
       return 'Unknown location';
+    }
+  }
+  
+  /// Save screenshot to temporary file
+  static Future<String> _saveScreenshotToFile(Uint8List screenshot, int sectionIndex) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+      final tempDir = Directory('${directory.path}/temp_screenshots');
+      if (!await tempDir.exists()) {
+        await tempDir.create(recursive: true);
+      }
+      
+      final filename = 'section_${sectionIndex}_${DateTime.now().millisecondsSinceEpoch}.png';
+      final file = File('${tempDir.path}/$filename');
+      await file.writeAsBytes(screenshot);
+      
+      print('🔍 PPT: Saved screenshot $sectionIndex to ${file.path}');
+      return file.path;
+    } catch (e) {
+      print('🔍 PPT: Error saving screenshot $sectionIndex: $e');
+      return '';
+    }
+  }
+
+  /// Clean up temporary screenshot files
+  static Future<void> _cleanupTempScreenshots(Map<int, String> screenshotPaths) async {
+    try {
+      for (final path in screenshotPaths.values) {
+        if (path.isNotEmpty) {
+          final file = File(path);
+          if (await file.exists()) {
+            await file.delete();
+            print('🔍 PPT: Cleaned up temporary file: $path');
+          }
+        }
+      }
+    } catch (e) {
+      print('🔍 PPT: Error cleaning up screenshots: $e');
     }
   }
   

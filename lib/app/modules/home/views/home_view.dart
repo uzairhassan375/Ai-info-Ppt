@@ -7,137 +7,221 @@ class HomeView extends GetView<HomeController> {
   
   @override
   Widget build(BuildContext context) {
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    final isKeyboardVisible = keyboardHeight > 0;
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
-      appBar: AppBar(
-        title: const Text(
-          'Infographic Generator',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        centerTitle: true,
-        backgroundColor: const Color(0xFF6C63FF),
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: 32),
-            
-            // Header Section
-            Container(
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF6C63FF), Color(0xFF9C88FF)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF6C63FF).withOpacity(0.3),
-                    blurRadius: 20,
-                    offset: const Offset(0, 10),
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  const Icon(
-                    Icons.auto_awesome,
-                    size: 48,
-                    color: Colors.white,
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'AI-Powered Infographic Creator',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Transform your ideas into stunning, data-rich visual infographics with professional-grade design and comprehensive statistics',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white70,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
+      backgroundColor: Colors.white,
+      body: Stack(
+        children: [
+          // Background with wave-like shape
+          Positioned.fill(
+            child: CustomPaint(
+              painter: _WavePainter(),
+              child: Container(),
             ),
-            
-            const SizedBox(height: 32),
-            
-            // Input Section
-            Container(
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 20,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
-              ),
+          ),
+          
+          // Main content
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(height: 40),
+                  
+                  // App Title
                   const Text(
-                    'What would you like to create?',
+                    'Imagine X',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 32,
                       fontWeight: FontWeight.bold,
                       color: Color(0xFF2D3748),
                     ),
                   ),
-                  const SizedBox(height: 16),
                   
-                  TextField(
-                    controller: controller.promptController,
-                    maxLines: 4,
-                    decoration: InputDecoration(
-                      hintText: 'e.g., "Climate change statistics and solutions", "Benefits of renewable energy", "Digital marketing trends 2024", "Artificial Intelligence impact on healthcare", "Sustainable business practices"...',
-                      hintStyle: TextStyle(
-                        color: Colors.grey[500],
-                        fontSize: 14,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: Colors.grey[300]!),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: Color(0xFF6C63FF), width: 2),
-                      ),
-                      filled: true,
-                      fillColor: const Color(0xFFF7FAFC),
-                      contentPadding: const EdgeInsets.all(16),
+                  const SizedBox(height: 8),
+                  
+                  // Subtitle
+                  const Text(
+                    'Visualize your ideas in seconds',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Color(0xFF718096),
                     ),
-                    onChanged: (value) => controller.clearError(),
                   ),
                   
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 60),
                   
-                  // Error Message
+                  // Prompt Input Field
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                      borderRadius: BorderRadius.circular(25),
+                boxShadow: [
+                  BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 20,
+                          offset: const Offset(0, 8),
+                  ),
+                ],
+              ),
+                    child: Obx(() => TextField(
+                      controller: controller.promptController,
+                      enabled: !controller.isLoading.value,
+                      decoration: InputDecoration(
+                        hintText: 'What you want to visualize...',
+                        hintStyle: TextStyle(
+                          color: Colors.grey[500],
+                          fontSize: 16,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(25),
+                          borderSide: BorderSide.none,
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 20,
+                        ),
+                        suffixIcon: Container(
+                          margin: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF2C3E50),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: controller.isLoading.value
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                  ),
+                                )
+                              : const Icon(
+                                  Icons.arrow_forward,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                        ),
+                      ),
+                      onChanged: (value) => controller.clearError(),
+                      onSubmitted: (value) => controller.generateInfographic(),
+                    )),
+                  ),
+                  
+                  const SizedBox(height: 40),
+                  
+                  // Example Topics
+                  const Text(
+                    'Example Topics:',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 20),
+                  
+                  // Tags Grid
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    children: [
+                      _buildTag('5G Technology'),
+                      _buildTag('Dog Breeds'),
+                      _buildTag('Public Issues'),
+                      _buildTag('Learning Plans'),
+                      _buildTag('Office Culture'),
+                      _buildTag('Fan Pages'),
+                      _buildTag('Freelance Work'),
+                      _buildTag('Objectives'),
+                      _buildTag('Furniture'),
+                      _buildTag('Climate Change'),
+                      _buildTag('AI Trends'),
+                    ],
+                  ),
+                  
+                  // Footer - Hide when keyboard is visible
+                  if (!isKeyboardVisible) ...[
+                    const Spacer(),
+                    const Column(
+                      children: [
+                        Text(
+                          'Innovation starts where imagination ends.',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          'AI that sees beyond limits ✨',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white70,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 40),
+                  ] else
+                    const SizedBox(height: 20),
+                ],
+              ),
+            ),
+          ),
+          
+          // Loading Overlay
+          Obx(() => controller.isLoading.value
+              ? Container(
+                  color: Colors.black.withValues(alpha: 0.3),
+                  child: const Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          strokeWidth: 3,
+                        ),
+                        SizedBox(height: 20),
+                        Text(
+                          'Creating your visualization...',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          'This may take a few moments',
+                          style: TextStyle(
+                            color: Colors.white70,
+                        fontSize: 14,
+                      ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              : const SizedBox.shrink()),
+
+          // Error Message (if any)
                   Obx(() => controller.errorMessage.value.isNotEmpty
-                      ? Container(
-                          padding: const EdgeInsets.all(12),
+              ? Positioned(
+                  top: 100,
+                  left: 24,
+                  right: 24,
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
                             color: Colors.red[50],
-                            borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(12),
                             border: Border.all(color: Colors.red[200]!),
                           ),
                           child: Row(
@@ -152,172 +236,86 @@ class HomeView extends GetView<HomeController> {
                               ),
                             ],
                           ),
-                        )
-                      : const SizedBox.shrink()),
-                  
-                  const SizedBox(height: 24),
-                  
-                  // Generate Button
-                  Obx(() => SizedBox(
-                    width: double.infinity,
-                    height: 56,
-                    child: ElevatedButton(
-                      onPressed: controller.isLoading.value ? null : controller.generateInfographic,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF6C63FF),
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        elevation: 0,
-                        shadowColor: Colors.transparent,
-                      ),
-                      child: controller.isLoading.value
-                          ? const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  width: 20,
-                                  height: 20,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                  ),
-                                ),
-                                SizedBox(width: 12),
-                                Text(
-                                  'Creating Infographic..',
-                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                                ),
-                              ],
-                            )
-                          : const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.auto_awesome, size: 20),
-                                SizedBox(width: 8),
-                                Text(
-                                  'Generate Infographic',
-                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                                ),
-                              ],
-                            ),
-                    ),
-                  )),
-                ],
-              ),
-            ),
-            
-            const SizedBox(height: 32),
-            
-            // Features Section
-            Container(
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
-                    blurRadius: 20,
-                    offset: const Offset(0, 5),
                   ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Features',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF2D3748),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  
-                  _buildFeatureItem(
-                    Icons.psychology,
-                    'AI-Powered Generation',
-                    'Advanced Google Gemini AI creates data-rich, professional infographics',
-                  ),
-                  _buildFeatureItem(
-                    Icons.analytics,
-                    'Rich Data Visualization',
-                    'Comprehensive statistics, charts, and interactive data elements',
-                  ),
-                  _buildFeatureItem(
-                    Icons.edit,
-                    'Editable Content',
-                    'Edit text elements directly in the generated infographic',
-                  ),
-                  _buildFeatureItem(
-                    Icons.download,
-                    'PNG Export',
-                    'Download your infographic as a high-quality PNG image',
-                  ),
-                  _buildFeatureItem(
-                    Icons.palette,
-                    'Professional Design',
-                    'Modern gradients, animations, and glassmorphism effects',
-                  ),
-                  _buildFeatureItem(
-                    Icons.timeline,
-                    'Multiple Chart Types',
-                    'Bar charts, pie charts, progress bars, and trend visualizations',
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-  
-  Widget _buildFeatureItem(IconData icon, String title, String description) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 16),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: const Color(0xFF6C63FF).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(
-              icon,
-              color: const Color(0xFF6C63FF),
-              size: 20,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF2D3748),
-                  ),
-                ),
-                Text(
-                  description,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
-                ),
-              ],
-            ),
-          ),
+                )
+              : const SizedBox.shrink()),
         ],
       ),
     );
   }
+  
+  Widget _buildTag(String text) {
+    return Obx(() => GestureDetector(
+      onTap: controller.isLoading.value ? null : () {
+        controller.promptController.text = text;
+        controller.generateInfographic();
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: controller.isLoading.value 
+                ? const Color(0xFF2D3748).withValues(alpha: 0.5)
+                : const Color(0xFF2D3748),
+          ),
+        ),
+      ),
+    ));
+  }
+}
+
+class _WavePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = const Color(0xFF2C3E50)
+      ..style = PaintingStyle.fill;
+
+    final path = Path();
+    
+    // Create a wave-like shape starting from the left
+    path.moveTo(0, size.height * 0.3);
+    
+    // First curve
+    path.quadraticBezierTo(
+      size.width * 0.2, size.height * 0.2,
+      size.width * 0.4, size.height * 0.3,
+    );
+    
+    // Second curve
+    path.quadraticBezierTo(
+      size.width * 0.6, size.height * 0.4,
+      size.width * 0.8, size.height * 0.3,
+    );
+    
+    // Final curve to bottom right
+    path.quadraticBezierTo(
+      size.width, size.height * 0.2,
+      size.width, size.height,
+    );
+    
+    // Complete the shape
+    path.lineTo(size.width, size.height);
+    path.lineTo(0, size.height);
+    path.close();
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

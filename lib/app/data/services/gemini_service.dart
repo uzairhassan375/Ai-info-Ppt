@@ -74,7 +74,8 @@ PROFESSIONAL INFOGRAPHIC REQUIREMENTS:
    - NEVER use external images - focus on CSS-based visual design
 
 3. MOBILE-FIRST LAYOUT & STRUCTURE:
-   - Create a single-page portrait design optimized for mobile screens (9:16 aspect ratio)
+   - Create sections in 16:9 aspect ratio for optimal mobile portrait viewing
+   - Each section should be exactly 16:9 ratio (width: 100vw, height: 56.25vw)
    - Use single-column layout to maximize readability on narrow screens
    - Implement vertical stacking with proper spacing between sections
    - Avoid horizontal columns that cause content overflow on mobile
@@ -85,9 +86,10 @@ PROFESSIONAL INFOGRAPHIC REQUIREMENTS:
    - Use generous padding (2-3vw) around all content elements
    - Add clear visual separation between different data sections
    - Ensure all text is readable with proper contrast and spacing
+   - MANDATORY: Each section must be wrapped in a container with class "section-16-9"
 
 4. TECHNICAL SPECIFICATIONS FOR MOBILE:
-   - Width = 100vw, Max-height = calc(100vw * 16 / 9)
+   - Each section: Width = 100vw, Height = 56.25vw (16:9 aspect ratio)
    - All sizing in vw, %, or relative units (no px, vh)
    - Text sizes: 1.2vw to 4vw for better mobile readability
    - Use full-width containers (95-98vw) with minimal margins (1-2vw)
@@ -96,15 +98,20 @@ PROFESSIONAL INFOGRAPHIC REQUIREMENTS:
    - Use CSS-generated visual elements and graphics
    - Implement CSS animations and transitions optimized for mobile
    - Create visual interest through CSS gradients, shadows, and shapes
+   - MANDATORY: Add CSS for .section-16-9 class with exact 16:9 dimensions
+   - CRITICAL: Each section must be completely separate with NO overlapping content
+   - Use proper margins and padding to prevent data overlap
+   - Ensure each section has its own dedicated space
 
-5. CONTENT ELEMENTS TO INCLUDE:
-   - Eye-catching title with subtitle
-   - 3-4 main data sections with statistics
-   - 2-3 comparison charts or infographics
-   - Key takeaways or bullet points
-   - Visual icons and illustrations
-   - Color-coded categories or themes
-   - Call-to-action or conclusion section
+5. CONTENT ELEMENTS TO INCLUDE (MANDATORY 6-8 SECTIONS):
+   - Section 1: Eye-catching title with subtitle (16:9)
+   - Section 2: Executive summary with key highlights (16:9)
+   - Section 3: Main statistics and data points (16:9)
+   - Section 4: Detailed analysis with bullet points (16:9)
+   - Section 5: Comparison charts or infographics (16:9)
+   - Section 6: Visual data representations (16:9)
+   - Section 7: Key takeaways and insights (16:9)
+   - Section 8: Conclusion and call-to-action (16:9)
 
 6. MOBILE-FIRST PROFESSIONAL TOUCHES:
    - Use data visualization libraries concepts (Chart.js style CSS)
@@ -125,6 +132,458 @@ PROFESSIONAL INFOGRAPHIC REQUIREMENTS:
    - Footer section: Full-width with proper mobile typography
    - Avoid: Multi-column grids, horizontal sidebars, cramped layouts
    - Use: Vertical flow, generous white space, touch-friendly sizing
+
+8. MANDATORY CSS STRUCTURE FOR 16:9 SECTIONS:
+   .section-16-9 {
+     width: 100vw;
+     height: 56.25vw;
+     margin: 0;
+     padding: 2vw;
+     box-sizing: border-box;
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+     position: relative;
+     overflow: hidden;
+   }
+   
+   /* Professional Theme Colors */
+   .section-16-9 {
+     background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+     color: #ffffff;
+     border-radius: 1vw;
+     margin: 0.5vw 0;
+     box-shadow: 0 0.5vw 1.5vw rgba(0,0,0,0.2);
+   }
+   
+   .section-16-9 h1,
+   .section-16-9 h2,
+   .section-16-9 h3 {
+     color: #ffffff;
+     text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+     font-weight: 600;
+   }
+   
+   .section-16-9 p,
+   .section-16-9 li {
+     color: #f8f9fa;
+     text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+   }
+   
+   .section-16-9 + .section-16-9 {
+     margin-top: 0;
+   }
+   
+   .section-16-9 h1, .section-16-9 h2, .section-16-9 h3 {
+     margin: 0 0 1vw 0;
+     text-align: center;
+   }
+   
+   .section-16-9 p, .section-16-9 li {
+     margin: 0.5vw 0;
+     line-height: 1.4;
+   }
+   
+   /* Prevent overlap and ensure proper spacing */
+   .section-16-9 {
+     clear: both;
+     page-break-inside: avoid;
+   }
+   
+   .section-16-9 * {
+     max-width: 100%;
+     overflow: hidden;
+   }
+   
+   /* Ensure charts and graphs don't overlap */
+   .section-16-9 .chart, .section-16-9 .graph {
+     max-height: 40%;
+     width: 100%;
+     margin: 1vw 0;
+   }
+   
+   /* Professional text sizing for 16:9 sections */
+   .section-16-9 h1 {
+     font-size: 3vw;
+     line-height: 1.1;
+     margin: 0 0 1.5vw 0;
+     font-weight: 700;
+     letter-spacing: 0.05em;
+   }
+   
+   .section-16-9 h2 {
+     font-size: 2.2vw;
+     line-height: 1.2;
+     margin: 0 0 1.2vw 0;
+     font-weight: 600;
+     letter-spacing: 0.03em;
+   }
+   
+   .section-16-9 h3 {
+     font-size: 1.8vw;
+     line-height: 1.3;
+     margin: 0 0 1vw 0;
+     font-weight: 600;
+   }
+   
+   .section-16-9 p {
+     font-size: 1.3vw;
+     line-height: 1.5;
+     margin: 0.6vw 0;
+     font-weight: 400;
+   }
+   
+   .section-16-9 .statistic {
+     font-size: 1.6vw;
+     font-weight: 700;
+     line-height: 1.2;
+     letter-spacing: 0.02em;
+   }
+   
+   .section-16-9 .chart-label {
+     font-size: 1.1vw;
+     font-weight: 500;
+     letter-spacing: 0.01em;
+   }
+   
+   /* Bullet points spacing */
+   .section-16-9 ul, .section-16-9 ol {
+     padding-left: 3vw;
+     margin: 1vw 0;
+   }
+   
+   .section-16-9 li {
+     margin: 0.3vw 0;
+     padding: 0.2vw 0;
+     font-size: 1.1vw;
+     line-height: 1.4;
+   }
+   
+   /* COMPACT BULLET POINTS FOR INSIGHTS */
+   .compact-bullets {
+     padding: 1.5vw;
+     margin: 1vw 0;
+   }
+   
+   .compact-bullets ul {
+     padding-left: 2vw;
+     margin: 0.5vw 0;
+   }
+   
+   .compact-bullets li {
+     margin: 0.5vw 0;
+     padding: 0.3vw 0;
+     font-size: 1vw;
+     line-height: 1.3;
+     color: #f8f9fa;
+   }
+   
+   /* SIMPLE SUMMARY FOR CONCLUSION */
+   .simple-summary {
+     padding: 2vw;
+     text-align: center;
+   }
+   
+   .simple-summary h3 {
+     font-size: 1.5vw;
+     margin-bottom: 1vw;
+     color: #ffffff;
+   }
+   
+   .simple-summary ul {
+     padding-left: 2vw;
+     margin: 0.5vw 0;
+   }
+   
+   .simple-summary li {
+     margin: 0.4vw 0;
+     padding: 0.2vw 0;
+     font-size: 1vw;
+     line-height: 1.3;
+     color: #f8f9fa;
+   }
+   
+   /* PROFESSIONAL DATA CARD LAYOUTS */
+   .data-cards {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     gap: 2vw;
+     width: 100%;
+     height: 100%;
+     padding: 2vw;
+   }
+   
+   .data-card {
+     background: rgba(255,255,255,0.15);
+     border-radius: 1.5vw;
+     padding: 2vw;
+     text-align: center;
+     box-shadow: 0 0.8vw 2vw rgba(0,0,0,0.2);
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+     border: 1px solid rgba(255,255,255,0.2);
+     backdrop-filter: blur(10px);
+     transition: transform 0.3s ease, box-shadow 0.3s ease;
+   }
+   
+   .data-card:hover {
+     transform: translateY(-0.5vw);
+     box-shadow: 0 1vw 2.5vw rgba(0,0,0,0.3);
+   }
+   
+   .data-card .icon {
+     font-size: 3vw;
+     margin-bottom: 1vw;
+     color: #ffffff;
+     text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+   }
+   
+   .data-card .number {
+     font-size: 2.8vw;
+     font-weight: 700;
+     margin: 0.8vw 0;
+     color: #ffffff;
+     text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+     letter-spacing: 0.05em;
+   }
+   
+   .data-card .label {
+     font-size: 1.2vw;
+     opacity: 0.9;
+     color: #f8f9fa;
+     font-weight: 500;
+     letter-spacing: 0.02em;
+   }
+   
+   /* COMPACT DATA CARDS FOR STATISTICS */
+   .compact-cards {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     gap: 1.5vw;
+     width: 100%;
+     height: 100%;
+     padding: 1.5vw;
+   }
+   
+   .compact-card {
+     background: rgba(255,255,255,0.1);
+     border-radius: 1vw;
+     padding: 1.5vw;
+     text-align: center;
+     box-shadow: 0 0.3vw 0.8vw rgba(0,0,0,0.1);
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+     border: 1px solid rgba(255,255,255,0.1);
+   }
+   
+   .compact-card .icon {
+     font-size: 2vw;
+     margin-bottom: 0.5vw;
+     color: #ffffff;
+   }
+   
+   .compact-card .number {
+     font-size: 1.8vw;
+     font-weight: 600;
+     margin: 0.3vw 0;
+     color: #ffffff;
+   }
+   
+   .compact-card .label {
+     font-size: 0.9vw;
+     opacity: 0.8;
+     color: #f8f9fa;
+     font-weight: 400;
+   }
+   
+   /* PROFESSIONAL COMPARISON TABLE */
+   .comparison-table {
+     width: 100%;
+     border-collapse: collapse;
+     margin: 2vw 0;
+     background: rgba(255,255,255,0.1);
+     border-radius: 1vw;
+     overflow: hidden;
+     box-shadow: 0 0.5vw 1.5vw rgba(0,0,0,0.1);
+   }
+   
+   .comparison-table th,
+   .comparison-table td {
+     padding: 1.5vw;
+     text-align: left;
+     border-bottom: 1px solid rgba(255,255,255,0.1);
+     color: #ffffff;
+   }
+   
+   .comparison-table th {
+     background: rgba(255,255,255,0.15);
+     font-weight: 600;
+     font-size: 1.3vw;
+     text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+   }
+   
+   .comparison-table tr:nth-child(even) {
+     background: rgba(255,255,255,0.05);
+   }
+   
+   .comparison-table tr:hover {
+     background: rgba(255,255,255,0.1);
+   }
+   
+   /* PROFESSIONAL PROGRESS BARS */
+   .progress-container {
+     width: 100%;
+     margin: 2vw 0;
+     padding: 1vw;
+   }
+   
+   .progress-item {
+     margin: 1.5vw 0;
+     background: rgba(255,255,255,0.1);
+     padding: 1.5vw;
+     border-radius: 1vw;
+     backdrop-filter: blur(10px);
+   }
+   
+   .progress-label {
+     font-size: 1.3vw;
+     margin-bottom: 0.8vw;
+     color: #ffffff;
+     font-weight: 500;
+     text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+   }
+   
+   .progress-bar {
+     width: 100%;
+     height: 1.2vw;
+     background: rgba(255,255,255,0.2);
+     border-radius: 0.6vw;
+     overflow: hidden;
+     box-shadow: inset 0 0.2vw 0.4vw rgba(0,0,0,0.2);
+   }
+   
+   .progress-fill {
+     height: 100%;
+     background: linear-gradient(90deg, #4CAF50, #8BC34A, #45B7D1);
+     border-radius: 0.6vw;
+     transition: width 0.8s ease;
+     box-shadow: 0 0.2vw 0.8vw rgba(76,175,80,0.3);
+   }
+   
+   /* PROFESSIONAL PIE CHART */
+   .pie-chart {
+     width: 10vw;
+     height: 10vw;
+     border-radius: 50%;
+     background: conic-gradient(
+       #FF6B6B 0deg 120deg,
+       #4ECDC4 120deg 240deg,
+       #45B7D1 240deg 360deg
+     );
+     margin: 2vw auto;
+     box-shadow: 0 0.8vw 2vw rgba(0,0,0,0.2);
+     border: 0.3vw solid rgba(255,255,255,0.3);
+   }
+   
+   /* PROFESSIONAL TIMELINE LAYOUT */
+   .timeline {
+     position: relative;
+     padding: 2vw 0;
+     margin: 2vw 0;
+   }
+   
+   .timeline-item {
+     position: relative;
+     padding-left: 4vw;
+     margin: 2vw 0;
+     background: rgba(255,255,255,0.1);
+     padding: 2vw 2vw 2vw 4vw;
+     border-radius: 1vw;
+     backdrop-filter: blur(10px);
+   }
+   
+   .timeline-item::before {
+     content: '';
+     position: absolute;
+     left: 1.5vw;
+     top: 1.5vw;
+     width: 1.5vw;
+     height: 1.5vw;
+     border-radius: 50%;
+     background: linear-gradient(135deg, #4CAF50, #8BC34A);
+     box-shadow: 0 0.3vw 0.8vw rgba(76,175,80,0.3);
+   }
+   
+   .timeline-item::after {
+     content: '';
+     position: absolute;
+     left: 2.2vw;
+     top: 3vw;
+     width: 0.3vw;
+     height: 3vw;
+     background: linear-gradient(180deg, #4CAF50, #8BC34A);
+   }
+   
+   /* METRIC CARDS GRID */
+   .metric-grid {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     gap: 1.5vw;
+     width: 100%;
+     height: 100%;
+     padding: 1vw;
+   }
+   
+   .metric-card {
+     background: rgba(255,255,255,0.9);
+     border-radius: 1vw;
+     padding: 1.5vw;
+     text-align: center;
+     box-shadow: 0 0.5vw 1vw rgba(0,0,0,0.1);
+   }
+   
+   .metric-number {
+     font-size: 2.5vw;
+     font-weight: bold;
+     color: #2d3748;
+     margin: 0.5vw 0;
+   }
+   
+   .metric-label {
+     font-size: 1vw;
+     color: #666;
+   }
+   
+   /* BEFORE/AFTER COMPARISON */
+   .comparison-layout {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     gap: 2vw;
+     width: 100%;
+     height: 100%;
+     padding: 1vw;
+   }
+   
+   .comparison-side {
+     text-align: center;
+     padding: 1.5vw;
+     border-radius: 1vw;
+   }
+   
+   .comparison-before {
+     background: rgba(255,107,107,0.1);
+     border: 2px solid #FF6B6B;
+   }
+   
+   .comparison-after {
+     background: rgba(76,175,80,0.1);
+     border: 2px solid #4CAF50;
+   }
    
    PROFESSIONAL STATISTICS LAYOUT - MANDATORY:
    - Each statistic in its own card with 2-3vw padding
@@ -143,6 +602,230 @@ PROFESSIONAL INFOGRAPHIC REQUIREMENTS:
 The HTML should be complete body content (no DOCTYPE, html, head tags needed).
 The CSS should be comprehensive styling with mobile-first design patterns.
 Make sure all text content is wrapped in elements with descriptive classes like "title", "subtitle", "fact", "statistic", "chart", "data-point", etc.
+
+MANDATORY HTML STRUCTURE FOR EACH SECTION TYPE:
+
+1. 4-CARD LAYOUT HTML:
+   <div class="data-cards">
+     <div class="data-card">
+       <i class="fas fa-chart-line icon"></i>
+       <div class="number">85%</div>
+       <div class="label">Growth Rate</div>
+     </div>
+     <div class="data-card">
+       <i class="fas fa-users icon"></i>
+       <div class="number">1.2M</div>
+       <div class="label">Active Users</div>
+     </div>
+     <div class="data-card">
+       <i class="fas fa-dollar-sign icon"></i>
+       <div class="number">\$2.4M</div>
+       <div class="label">Revenue</div>
+     </div>
+     <div class="data-card">
+       <i class="fas fa-trophy icon"></i>
+       <div class="number">#1</div>
+       <div class="label">Market Position</div>
+     </div>
+   </div>
+
+2. COMPACT DATA CARDS HTML (for Statistics):
+   <div class="compact-cards">
+     <div class="compact-card">
+       <i class="fas fa-chart-line icon"></i>
+       <div class="number">85%</div>
+       <div class="label">Growth</div>
+     </div>
+     <div class="compact-card">
+       <i class="fas fa-users icon"></i>
+       <div class="number">1.2M</div>
+       <div class="label">Users</div>
+     </div>
+     <div class="compact-card">
+       <i class="fas fa-dollar-sign icon"></i>
+       <div class="number">\$2.4M</div>
+       <div class="label">Revenue</div>
+     </div>
+     <div class="compact-card">
+       <i class="fas fa-trophy icon"></i>
+       <div class="number">#1</div>
+       <div class="label">Rank</div>
+     </div>
+   </div>
+
+3. PROGRESS BARS HTML:
+   <div class="progress-container">
+     <div class="progress-item">
+       <div class="progress-label">Customer Satisfaction</div>
+       <div class="progress-bar">
+         <div class="progress-fill" style="width: 85%"></div>
+       </div>
+     </div>
+     <div class="progress-item">
+       <div class="progress-label">Market Share</div>
+       <div class="progress-bar">
+         <div class="progress-fill" style="width: 72%"></div>
+       </div>
+     </div>
+   </div>
+
+4. PIE CHART HTML:
+   <div class="pie-chart"></div>
+   <div class="chart-labels">
+     <span>Category A: 40%</span>
+     <span>Category B: 35%</span>
+     <span>Category C: 25%</span>
+   </div>
+
+5. COMPACT BULLET POINTS HTML (for Key Insights):
+   <div class="compact-bullets">
+     <ul>
+       <li>Key insight 1 - brief description</li>
+       <li>Key insight 2 - brief description</li>
+       <li>Key insight 3 - brief description</li>
+     </ul>
+   </div>
+
+6. SIMPLE SUMMARY HTML (for Conclusion):
+   <div class="simple-summary">
+     <h3>Key Takeaways</h3>
+     <ul>
+       <li>Main takeaway 1</li>
+       <li>Main takeaway 2</li>
+       <li>Main takeaway 3</li>
+     </ul>
+   </div>
+
+7. BEFORE/AFTER HTML:
+   <div class="comparison-layout">
+     <div class="comparison-side comparison-before">
+       <h3>Before</h3>
+       <div class="metric">\$500K</div>
+       <div class="label">Revenue</div>
+     </div>
+     <div class="comparison-side comparison-after">
+       <h3>After</h3>
+       <div class="metric">\$1.2M</div>
+       <div class="label">Revenue</div>
+     </div>
+   </div>
+
+MANDATORY CONTENT STRUCTURE - CREATE 6-8 DISTINCT SECTIONS WITH PROFESSIONAL DESIGN:
+
+1. TITLE SECTION (section-16-9):
+   - Main title (large, bold) - white text on professional gradient
+   - Subtitle (descriptive) - white text
+   - Visual elements/icons - white colors
+   - Professional gradient background
+
+2. EXECUTIVE SUMMARY SECTION (section-16-9):
+   - 4 CARD LAYOUT: Create 4 data cards with key highlights
+   - Each card: icon + number + description
+   - Card design: rounded corners, shadows, professional styling
+   - White text on professional gradient
+
+3. STATISTICS SECTION (section-16-9):
+   - COMPACT DATA CARDS: Create 4 small data cards in 2x2 grid
+   - Each card: small icon + number + short label
+   - Maximum 2-3 key statistics only
+   - Small text sizes for better fit
+   - White text on professional gradient
+
+4. DETAILED ANALYSIS SECTION (section-16-9):
+   - PROGRESS BARS: Show data as progress bars
+   - 3-4 progress bars with percentages
+   - Animated progress indicators
+   - White text on professional gradient
+
+5. CHARTS/GRAPHS SECTION (section-16-9):
+   - PIE CHART + BAR CHART: Mix of different chart types
+   - CSS-generated pie chart with percentages
+   - Horizontal bar chart for comparisons
+   - Professional chart styling
+
+6. KEY INSIGHTS SECTION (section-16-9):
+   - COMPACT BULLET POINTS: Show 3-4 key insights as simple bullet points
+   - Small text, clear spacing, no overlapping
+   - Simple list format for better readability
+   - White text on professional gradient
+
+7. CONCLUSION SECTION (section-16-9):
+   - SIMPLE SUMMARY: Show 2-3 key takeaways only
+   - Small text, clear spacing, no overlapping
+   - Simple bullet points format
+   - White text on professional gradient
+
+8. ADDITIONAL DATA SECTION (section-16-9):
+   - BEFORE/AFTER COMPARISON: Show data comparisons
+   - Side-by-side comparison layout
+   - Visual indicators for improvements
+   - White text on professional gradient
+
+CRITICAL REQUIREMENTS TO PREVENT OVERLAP:
+- Each section must be completely independent
+- NO content should extend beyond section boundaries
+- Use proper margins and padding (2-3vw minimum)
+- Ensure all text fits within the 16:9 container
+- Charts and graphs must be sized appropriately
+- Bullet points must not overflow
+- All content must be centered and properly spaced
+
+DIVERSE DATA PRESENTATION REQUIREMENTS:
+
+1. 4-CARD LAYOUT (Executive Summary):
+   - Create 4 data cards in 2x2 grid
+   - Each card: icon + large number + description
+   - Use Font Awesome icons (fas fa-chart-line, fas fa-users, etc.)
+   - Cards with rounded corners and subtle shadows
+
+2. COMPARISON TABLE (Statistics):
+   - Create HTML table with 2-3 columns
+   - Headers: Metric, Value, Change
+   - Alternating row colors for readability
+   - Include percentage changes and trends
+
+3. PROGRESS BARS (Detailed Analysis):
+   - 3-4 progress bars with percentages
+   - Each bar: label + percentage + visual bar
+   - Use CSS gradients for progress fills
+   - Animate progress bars with CSS
+
+4. PIE CHART + BAR CHART (Charts/Graphs):
+   - CSS pie chart using conic-gradient
+   - Horizontal bar chart for comparisons
+   - Color-coded segments with labels
+   - Responsive sizing for mobile
+
+5. TIMELINE LAYOUT (Key Insights):
+   - 3-4 timeline items with connecting lines
+   - Each item: date/point + description
+   - Vertical timeline with dots and lines
+   - Clear visual hierarchy
+
+6. METRIC CARDS GRID (Conclusion):
+   - 4 metric cards in 2x2 grid
+   - Each card: large number + label + trend
+   - Include trend indicators (up/down arrows)
+   - Professional card design
+
+7. BEFORE/AFTER COMPARISON (Additional Data):
+   - Side-by-side comparison layout
+   - Before: red theme, After: green theme
+   - Visual indicators for improvements
+   - Clear contrast between states
+
+OPTIMIZED DATA AMOUNT FOR 16:9 SECTIONS:
+- Maximum 3-4 data points per section
+- Use compact layouts to prevent overlapping
+- Small text sizes for better fit
+- Clear spacing between elements
+- Prioritize readability over data density
+
+SPECIFIC SECTION REQUIREMENTS:
+- Section 3 (Statistics): Maximum 4 compact cards, small text
+- Section 6 (Key Insights): Maximum 3 bullet points, small text
+- Section 7 (Conclusion): Maximum 3 takeaways, small text
+- All sections: Ensure no overlapping, clear headings
 
 TEXT-ONLY DESIGN REQUIREMENTS:
 

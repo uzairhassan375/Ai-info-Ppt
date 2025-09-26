@@ -33,16 +33,7 @@ class InfographicViewerView extends GetView<InfographicViewerController> {
               }
             },
             itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: 'png',
-                child: Row(
-                  children: [
-                    Icon(Icons.image, color: Color(0xFF6C63FF)),
-                    SizedBox(width: 8),
-                    Text('Download as PNG'),
-                  ],
-                ),
-              ),
+              // PNG download option hidden
               const PopupMenuItem(
                 value: 'ppt',
                 child: Row(
@@ -227,45 +218,10 @@ class InfographicViewerView extends GetView<InfographicViewerController> {
                         ),
                       ],
                     ),
+                    // Download PNG button hidden
                     const SizedBox(height: 12),
                     Row(
                       children: [
-                        Expanded(
-                          child: Obx(
-                            () => ElevatedButton.icon(
-                              onPressed: controller.isDownloading.value
-                                  ? null
-                                  : controller.downloadAsPng,
-                              icon: controller.isDownloading.value
-                                  ? const SizedBox(
-                                      width: 16,
-                                      height: 16,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        valueColor: AlwaysStoppedAnimation<Color>(
-                                          Colors.white,
-                                        ),
-                                      ),
-                                    )
-                                  : const Icon(Icons.image),
-                              label: Text(
-                                controller.isDownloading.value
-                                    ? 'Downloading...'
-                                    : 'Download PNG',
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF4CAF50),
-                                foregroundColor: Colors.white,
-                                elevation: 0,
-                                padding: const EdgeInsets.symmetric(vertical: 12),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
                         Expanded(
                           child: Obx(
                             () => ElevatedButton.icon(
