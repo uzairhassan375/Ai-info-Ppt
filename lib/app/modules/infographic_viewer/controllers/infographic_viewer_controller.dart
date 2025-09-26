@@ -15,9 +15,6 @@ class InfographicViewerController extends GetxController {
   InAppWebViewController? webViewController;
   final ScreenshotController screenshotController = ScreenshotController();
   
-  // Multiple screenshot controllers for each section
-  final List<ScreenshotController> sectionScreenshotControllers = [];
-  final sectionScreenshots = <int, Uint8List>{}.obs;
   
   final isLoading = true.obs;
   final isDownloading = false.obs;
@@ -377,28 +374,25 @@ class InfographicViewerController extends GetxController {
       // Show progress message
       Get.snackbar(
         "Generating PDF",
-        "Capturing section screenshots and creating PDF document...",
+        "Creating PDF document from content...",
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.blue.shade100,
         colorText: Colors.blue.shade800,
         duration: Duration(seconds: 2),
       );
 
-      // Capture screenshots of each section
-      await _captureSectionScreenshots();
-
-      // Generate PDF with screenshots
-      final filePath = await PDFService.generatePDFWithScreenshots(infographic.prompt, sectionScreenshots);
+      // Generate PDF directly from HTML content
+      final filePath = await PDFService.generatePDFFromHTML(infographic.prompt, infographic.combinedHtml);
       
       // Show success message
-      Get.snackbar(
-        'Success',
+        Get.snackbar(
+          'Success',
         'PDF document saved successfully!',
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: Colors.green[100],
-        colorText: Colors.green[800],
-        duration: const Duration(seconds: 4),
-      );
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.green[100],
+          colorText: Colors.green[800],
+          duration: const Duration(seconds: 4),
+        );
       
       // Also show a dialog with share option
       _showShareDialog(filePath);
@@ -416,131 +410,7 @@ class InfographicViewerController extends GetxController {
     }
   }
 
-  Future<void> _captureSectionScreenshots() async {
-    try {
-      sectionScreenshots.clear();
-      
-      print('📸 Starting screenshot capture process...');
-      
-      // Always capture the full infographic first as a reliable fallback
-      final fullScreenshot = await screenshotController.capture();
-      if (fullScreenshot != null && fullScreenshot.isNotEmpty) {
-        sectionScreenshots[0] = fullScreenshot;
-        print('📸 Captured full infographic (${fullScreenshot.length} bytes)');
-      } else {
-        print('❌ Failed to capture full infographic');
-        return;
-      }
-      
-      // Get the number of sections from the HTML
-      final sectionCount = _countSectionsInHTML();
-      print('📸 Found $sectionCount sections in HTML');
-      
-      if (sectionCount > 1) {
-        // Try to capture individual sections
-        await _captureEachSectionIndividually(sectionCount);
-        print('📸 Attempted to capture $sectionCount individual sections');
-      } else {
-        print('📸 Only one section detected, using full screenshot for all slides');
-        // If only one section, use the full screenshot for multiple slides
-        for (int i = 1; i < 6; i++) { // Create 5 additional slides with the same screenshot
-          sectionScreenshots[i] = fullScreenshot;
-        }
-      }
-      
-      print('📸 Successfully captured ${sectionScreenshots.length} section screenshots');
-      for (final entry in sectionScreenshots.entries) {
-        print('📸 Section ${entry.key}: ${entry.value.length} bytes');
-      }
-    } catch (e) {
-      print('❌ Error capturing section screenshots: $e');
-      // Ensure we have at least one screenshot
-      if (sectionScreenshots.isEmpty) {
-        final fullScreenshot = await screenshotController.capture();
-        if (fullScreenshot != null && fullScreenshot.isNotEmpty) {
-          sectionScreenshots[0] = fullScreenshot;
-          print('📸 Used full screenshot as final fallback');
-        }
-      }
-    }
-  }
 
-  Future<void> _captureEachSectionIndividually(int sectionCount) async {
-    try {
-      if (webViewController == null) {
-        print('❌ WebView controller not available');
-        return;
-      }
-
-      // Start from the top
-      await webViewController!.scrollTo(x: 0, y: 0);
-      await Future.delayed(Duration(milliseconds: 1000));
-
-      for (int i = 0; i < sectionCount; i++) {
-        try {
-          print('📸 Capturing section $i...');
-          
-          // Scroll to the specific section
-          await _scrollToSection(i);
-          await Future.delayed(Duration(milliseconds: 1000));
-          
-          // Wait for content to load
-          await Future.delayed(Duration(milliseconds: 800));
-          
-          // Capture the current view
-          final screenshot = await screenshotController.capture();
-          if (screenshot != null && screenshot.isNotEmpty) {
-            sectionScreenshots[i] = screenshot;
-            print('✅ Successfully captured section $i (${screenshot.length} bytes)');
-          } else {
-            print('❌ Failed to capture section $i - screenshot is null or empty');
-            // Use the full screenshot as fallback for this section
-            if (sectionScreenshots.containsKey(0)) {
-              sectionScreenshots[i] = sectionScreenshots[0]!;
-              print('📸 Used full screenshot as fallback for section $i');
-            }
-          }
-        } catch (e) {
-          print('❌ Failed to capture section $i: $e');
-          // Use the full screenshot as fallback for this section
-          if (sectionScreenshots.containsKey(0)) {
-            sectionScreenshots[i] = sectionScreenshots[0]!;
-            print('📸 Used full screenshot as fallback for section $i after error');
-          }
-        }
-      }
-      
-      print('📸 Individual section capture completed. Total screenshots: ${sectionScreenshots.length}');
-    } catch (e) {
-      print('❌ Error in section capture: $e');
-    }
-  }
-
-  Future<void> _scrollToSection(int sectionIndex) async {
-    try {
-      if (webViewController == null) return;
-      
-      // Calculate scroll position based on section index
-      // Each section is 56.25vw high, so we need to scroll by sectionIndex * 56.25vw
-      // Convert to pixels (assuming 1vw = 3.75px on average mobile screen)
-      final scrollY = (sectionIndex * 56.25 * 3.75).round();
-      
-      print('📸 Scrolling to section $sectionIndex at position $scrollY');
-      await webViewController!.scrollTo(x: 0, y: scrollY);
-      
-      // Wait for scroll to complete
-      await Future.delayed(Duration(milliseconds: 300));
-    } catch (e) {
-      print('❌ Error scrolling to section $sectionIndex: $e');
-    }
-  }
-
-  int _countSectionsInHTML() {
-    // Count sections with class "section-16-9" in the HTML
-    final sectionMatches = RegExp(r'<[^>]*class="[^"]*section-16-9[^"]*"[^>]*>', dotAll: true)
-        .allMatches(infographic.htmlCode);
-    return sectionMatches.length;
-  }
 
   void regenerateInfographic() {
     Get.back();
