@@ -25,8 +25,9 @@ class HomeView extends GetView<HomeController> {
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Column(
-                children: [
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
                   const SizedBox(height: 40),
                   
                   // App Title
@@ -151,7 +152,7 @@ class HomeView extends GetView<HomeController> {
                   
                   // Footer - Hide when keyboard is visible
                   if (!isKeyboardVisible) ...[
-                    const Spacer(),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.1),
                     const Column(
                       children: [
                         Text(
@@ -176,7 +177,8 @@ class HomeView extends GetView<HomeController> {
                     const SizedBox(height: 40),
                   ] else
                     const SizedBox(height: 20),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

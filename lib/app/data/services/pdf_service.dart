@@ -59,6 +59,51 @@ class PDFService {
     }
   }
 
+  static Future<String> generatePDFFromScreenshot({
+    required String prompt,
+    required Uint8List screenshotBytes,
+  }) async {
+    try {
+      print('📄 PDF: Starting PDF generation with ${screenshotBytes.length} bytes');
+      
+      // Create PDF document
+      final pdf = pw.Document();
+      
+      // Create image from screenshot bytes
+      final image = pw.MemoryImage(screenshotBytes);
+      
+      // Add simple content page with screenshot only
+      pdf.addPage(
+        pw.Page(
+          pageFormat: PdfPageFormat.a4,
+          margin: const pw.EdgeInsets.all(20),
+          build: (pw.Context context) {
+            return pw.Center(
+              child: pw.Image(
+                image,
+                fit: pw.BoxFit.contain,
+                width: 550,
+                height: 700,
+              ),
+            );
+          },
+        ),
+      );
+      
+      // Save PDF
+      final pdfBytes = await pdf.save();
+      print('📄 PDF: Generated PDF with ${pdfBytes.length} bytes');
+      
+      final filePath = await _savePDFFile(pdfBytes, prompt);
+      print('📄 PDF: Saved to $filePath');
+      
+      return filePath;
+    } catch (e) {
+      print('📄 PDF: Error generating PDF: $e');
+      rethrow;
+    }
+  }
+
   static Future<String> generatePDFWithScreenshots(
     String prompt,
     Map<int, Uint8List> sectionScreenshots,
@@ -276,34 +321,30 @@ class PDFService {
             children: [
               pw.Text(
                 'AI Visualizer',
-                style: pw.TextStyle(
+                style: const pw.TextStyle(
                   fontSize: 32,
-                  fontWeight: pw.FontWeight.bold,
                 ),
               ),
               pw.SizedBox(height: 20),
               pw.Text(
                 'Infographic Report',
-                style: pw.TextStyle(
+                style: const pw.TextStyle(
                   fontSize: 24,
-                  fontWeight: pw.FontWeight.normal,
                 ),
               ),
               pw.SizedBox(height: 40),
               pw.Text(
                 'Topic: $prompt',
-                style: pw.TextStyle(
+                style: const pw.TextStyle(
                   fontSize: 18,
-                  fontWeight: pw.FontWeight.normal,
                 ),
                 textAlign: pw.TextAlign.center,
               ),
               pw.SizedBox(height: 40),
               pw.Text(
                 'Generated with AI Visualizer',
-                style: pw.TextStyle(
+                style: const pw.TextStyle(
                   fontSize: 14,
-                  fontWeight: pw.FontWeight.normal,
                 ),
               ),
             ],
@@ -315,29 +356,14 @@ class PDFService {
 
   static Future<String> _savePDFFile(Uint8List pdfBytes, String prompt) async {
     try {
-      // Try to get external storage first, fallback to internal storage
-      Directory directory;
-      try {
-        // Try external storage first
-        directory = await getExternalStorageDirectory() ?? await getApplicationDocumentsDirectory();
-      } catch (e) {
-        print('📄 PDF: External storage not available, using internal: $e');
-        // Fallback to internal storage
-        directory = await getApplicationDocumentsDirectory();
-      }
+      // Get app's documents directory (more reliable for sharing)
+      final Directory appDocDir = await getApplicationDocumentsDirectory();
       
-      final pdfDir = Directory('${directory.path}/PDF');
-      
-      // Create PDF directory if it doesn't exist
-      if (!pdfDir.existsSync()) {
-        pdfDir.createSync(recursive: true);
-      }
-
       // Generate filename
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final sanitizedPrompt = prompt.replaceAll(RegExp(r'[^\w\s-]'), '').replaceAll(' ', '_');
-      final fileName = 'infographic_${sanitizedPrompt}_$timestamp.pdf';
-      final filePath = '${pdfDir.path}/$fileName';
+      final fileName = 'generated_presentation_${sanitizedPrompt}_$timestamp.pdf';
+      final filePath = '${appDocDir.path}/$fileName';
 
       // Save PDF file
       final file = File(filePath);
