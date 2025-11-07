@@ -1,4 +1,4 @@
-package com.ai.visualizer.app
+package com.smartslides.app
 
 import io.flutter.embedding.android.FlutterActivity
 

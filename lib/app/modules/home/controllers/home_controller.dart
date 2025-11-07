@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'dart:async';
 import '../../../data/services/gemini_service.dart';
 import '../../../routes/app_pages.dart';
 import 'dart:developer' as dp;
@@ -10,10 +11,36 @@ class HomeController extends GetxController {
 
   final isLoading = false.obs;
   final errorMessage = ''.obs;
+  // Loading tips and state for friendly loading UI
+  final List<String> loadingTips = [
+    'Tip: Try short descriptive prompts for clearer slides.',
+    'Tip: Use keywords like "timeline", "statistics", "compare".',
+    'Tip: Add a target audience to the prompt for tailored visuals.',
+    'Tip: Combine colors like blue and white for professional slides.'
+  ];
+  final currentLoadingTip = ''.obs;
+  Timer? _tipsTimer;
 
   @override
   void onInit() {
     super.onInit();
+    // initialize current tip
+    currentLoadingTip.value = loadingTips.first;
+
+    // react to loading state to start/stop the tip timer
+    ever(isLoading, (bool loading) {
+      if (loading) {
+        // start cycling tips every 2 seconds
+        _tipsTimer?.cancel();
+        _tipsTimer = Timer.periodic(const Duration(seconds: 2), (t) {
+          final nextIndex = (loadingTips.indexOf(currentLoadingTip.value) + 1) % loadingTips.length;
+          currentLoadingTip.value = loadingTips[nextIndex];
+        });
+      } else {
+        _tipsTimer?.cancel();
+        currentLoadingTip.value = loadingTips.first;
+      }
+    });
   }
 
   @override
@@ -24,6 +51,7 @@ class HomeController extends GetxController {
   @override
   void onClose() {
     promptController.dispose();
+    _tipsTimer?.cancel();
     super.onClose();
   }
 

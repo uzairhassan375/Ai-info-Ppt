@@ -26,10 +26,7 @@ class InfographicViewerView extends GetView<InfographicViewerController> {
             onPressed: controller.regenerateInfographic,
             icon: const Icon(Icons.refresh, color: Colors.white),
           ),
-          IconButton(
-            onPressed: controller.testScreenshotCapability,
-            icon: const Icon(Icons.camera_alt, color: Colors.white),
-          ),
+          // Camera button removed per UX request
           IconButton(
             onPressed: controller.testPermissions,
             icon: const Icon(Icons.security, color: Colors.white),

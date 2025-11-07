@@ -1,40 +1,21 @@
 {
   "project_info": {
-    "project_number": "167812148191",
-    "project_id": "presentation-doc-html",
-    "storage_bucket": "presentation-doc-html.firebasestorage.app"
+    "project_number": "617206699665",
+    "project_id": "imagine-x-93a59",
+    "storage_bucket": "imagine-x-93a59.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:167812148191:android:2ec97a5a93ed6959c0726a",
+        "mobilesdk_app_id": "1:617206699665:android:c2b9bc5537102017249130",
         "android_client_info": {
-          "package_name": "com.ai.visualizer.app"
+          "package_name": "com.smartslides.app"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBTifDHNzo4Jo33zjilY6BoP2l0JxthxLg"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:167812148191:android:ecd2e54bea4746c5c0726a",
-        "android_client_info": {
-          "package_name": "com.example.infography"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBTifDHNzo4Jo33zjilY6BoP2l0JxthxLg"
+          "current_key": "AIzaSyAe3lDNnR-jUem9_bjNjh-olYioBu1uriM"
         }
       ],
       "services": {
