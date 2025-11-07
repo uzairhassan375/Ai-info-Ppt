@@ -6,21 +6,23 @@ import 'package:get/get.dart';
 import 'package:infography/app/data/services/remote-config-service.dart';
 import 'app/routes/app_pages.dart';
 
-void main() {
-WidgetsFlutterBinding.ensureInitialized();
-  //Api Key Package Initialization
+void main() async {
+  // Make sure bindings are initialized before using async
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Api Key Package Initialization
   ApiKeyPool.init('Ai_Visualizer');
 
-  // Initialize Firebase
-  Firebase.initializeApp();
+  //  Await Firebase initialization
+  await Firebase.initializeApp();
 
-  // Initialize Remote Config
-  RemoteConfigService().initialize();
+  //  Await Remote Config initialization
+  await RemoteConfigService().initialize();
 
   // Firebase Analytics instance
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   FirebaseAnalyticsObserver observer =
-  FirebaseAnalyticsObserver(analytics: analytics);
+      FirebaseAnalyticsObserver(analytics: analytics);
 
   runApp(
     GetMaterialApp(
@@ -32,6 +34,7 @@ WidgetsFlutterBinding.ensureInitialized();
         primarySwatch: Colors.deepPurple,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      navigatorObservers: [observer],
     ),
   );
 }

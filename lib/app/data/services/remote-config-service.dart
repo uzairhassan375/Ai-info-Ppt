@@ -6,7 +6,6 @@ class RemoteConfigService {
   static final RemoteConfigService _instance = RemoteConfigService._internal();
 
   factory RemoteConfigService() {
-    // Purchases.setEmail(email)
     return _instance;
   }
 

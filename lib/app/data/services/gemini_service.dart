@@ -4,18 +4,46 @@ import 'dart:async';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:api_key_pool/api_key_pool.dart';
+import 'package:infography/app/utils/ai_config.dart';
 import '../models/infographic_model.dart';
 
 class GeminiService {
-  static const String _apiKey =
-      // 'AIzaSyAUY0dVblf1jdSKWybm4vDrGtMK7apNjPc'; // Replace with your actual API key
-      'AIzaSyDYVQ7M8d5FckYRSGnC7yQaJN_RdVqNZQM'; // Replace with your actual API key
-  late final GenerativeModel _model;
+  GenerativeModel? _model;
 
-  GeminiService() {
+  GeminiService();
+
+  Future<void> _ensureModelInitialized() async {
+    if (_model != null) return;
+
+    // Retrieve API key dynamically from the ApiKeyPool. Handle both
+    // synchronous and Future-returning implementations.
+    String apiKey = '';
+    try {
+      final keyOrFuture = ApiKeyPool.getKey();
+      if (keyOrFuture is Future) {
+        final resolved = await (keyOrFuture as Future<dynamic>);
+        apiKey = resolved.toString();
+      } else {
+        apiKey = keyOrFuture.toString();
+      }
+    } catch (e) {
+      // If ApiKeyPool fails, leave apiKey empty and rely on downstream checks
+      print('🔒 WARNING: Failed to fetch API key from ApiKeyPool: $e');
+    }
+
+    // Validate API key; if invalid we continue but the API call will likely fail
+    if (!AIConfig.isValidApiKey(apiKey)) {
+      print('🔒 WARNING: Retrieved API key appears invalid or empty.');
+    }
+
+    // Get model name from Remote Config via AIConfig (with fallback)
+    final modelName = AIConfig.modelName;
+    final modelString = modelName.startsWith('models/') ? modelName : 'models/$modelName';
+
     _model = GenerativeModel(
-      model: 'models/gemini-2.0-flash-lite',
-      apiKey: _apiKey,
+      model: modelString,
+      apiKey: apiKey,
       generationConfig: GenerationConfig(
         temperature: 0.7,
         topP: 0.9,
@@ -886,6 +914,7 @@ Create an infographic that looks like it was designed by a professional design a
   }
 
   Future<InfographicModel?> generateInfographic(String prompt) async {
+    await _ensureModelInitialized();
     const maxRetries = 3;
     const baseDelay = Duration(seconds: 2);
     
@@ -1227,7 +1256,7 @@ Create an infographic that looks like it was designed by a professional design a
           Remember: This should look like it was created by a professional design agency with extensive research and beautiful data visualization, optimized specifically for mobile viewing with highly relevant images.''',
         ),
       ];
-        final response = await _model.generateContent(content);
+  final response = await _model!.generateContent(content);
         
         // Debug logging for API response
         print('🔍 DEBUG: Gemini API response received on attempt $attempt');

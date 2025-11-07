@@ -1,4 +1,4 @@
-package com.example.infography
+package com.ai.visualizer.app
 
 import io.flutter.embedding.android.FlutterActivity
 
