@@ -221,8 +221,8 @@ class InfographicViewerController extends GetxController {
           source: 'window.scrollTo(0, ${rect['top']});'
         );
         
-        // Wait for paint completion
-        await Future.delayed(const Duration(milliseconds: 500));
+  // Wait for paint completion (slightly increased to handle slow paints)
+  await Future.delayed(const Duration(milliseconds: 700));
         
         // Take full viewport screenshot
         final fullScreenshot = await webViewController!.takeScreenshot();
@@ -485,8 +485,14 @@ class InfographicViewerController extends GetxController {
       final viewportHeight = (image.height / devicePixelRatio).round();
       
       // Calculate crop coordinates with device pixel ratio
-      var cropX = ((rect['left'] as double) * devicePixelRatio).round();
-      var cropY = 0; // Start from top since we scrolled to slide position
+  var cropX = ((rect['left'] as double) * devicePixelRatio).round();
+
+  // Compute cropY relative to the actual scrolled position. This handles
+  // cases where a fixed header or other offset causes the element's
+  // top to not align exactly with the viewport top after scroll.
+  final actualScroll = await webViewController!.evaluateJavascript(source: 'window.pageYOffset') as num;
+  var cropY = (((rect['top'] as double) - actualScroll) * devicePixelRatio).round();
+  if (cropY < 0) cropY = 0;
       var cropWidth = ((rect['width'] as double) * devicePixelRatio).round();
       var cropHeight = ((rect['height'] as double) * devicePixelRatio).round();
       
